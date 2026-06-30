@@ -12,11 +12,6 @@ Material formatiu bilingüe (valencià/castellà) del **CEFIRE d'Intel·ligènci
 - IA corporativa: Microsoft Copilot en @edu.gva.es
 - Protecció de dades en Copilot @edu.gva.es
 - Comptes @alu.gva.es i ús de la IA per part de l'alumnat
-- Primers passos amb Copilot: prompts i agents
-
-## Publicació
-
-Desplegat amb GitHub Pages. Fitxer HTML autocontingut sense dependències externes (excepte Google Fonts).
 
 ## Llicència
 
