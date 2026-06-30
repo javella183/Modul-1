@@ -1,0 +1,1551 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mòdul 1: Introducció a la IA generativa i IA corporativa @edu.gva.es</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f0f6f8;
+    --surface: #ffffff;
+    --sidebar-bg: #1b2a3a;
+    --sidebar-text: #c0d4e4;
+    --accent: #7ec8c8;
+    --accent-soft: rgba(126, 200, 200, 0.15);
+    --accent-warm: #b5d8f0;
+    --accent-green: #a3d9c6;
+    --text: #1b2a3a;
+    --text-muted: #607080;
+    --border: #d4e3ed;
+    --shadow: 0 10px 30px rgba(27, 42, 58, 0.07);
+    --info-bg: #e8f4f8;
+    --info-border: #7ec8c8;
+    --warning-bg: #fff8e8;
+    --warning-border: #e8c870;
+    --success-bg: #eaf6f0;
+    --success-border: #7ec8a0;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: linear-gradient(180deg, #eef4f7 0%, #e8f0f4 100%);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+  }
+  a { color: #2a7a8a; }
+  code {
+    background: #e4eef3;
+    padding: 0.1rem 0.35rem;
+    border-radius: 6px;
+    font-size: 0.92em;
+  }
+
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 68px;
+    padding: 0 1.5rem;
+    background: rgba(27, 42, 58, 0.97);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    color: #fff;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+  }
+  .brand-logo {
+    width: 44px;
+    height: 44px;
+    flex: 0 0 44px;
+  }
+  .brand-text { font-size: 1.05rem; }
+  .brand-text span { color: var(--accent); }
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+  .course-home-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.5rem 0.9rem;
+    border: 1px solid rgba(126, 200, 200, 0.35);
+    border-radius: 999px;
+    color: #f8fafc;
+    text-decoration: none;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    background: rgba(126, 200, 200, 0.12);
+    transition: 0.18s ease;
+  }
+  .course-home-link:hover,
+  .course-home-link:focus-visible {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #12202a;
+  }
+  .lang-switcher {
+    display: flex;
+    gap: 0.6rem;
+    margin-top: 1rem;
+  }
+  .lang-btn {
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.75);
+    padding: 0.45rem 1.1rem;
+    border-radius: 999px;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.18s ease;
+  }
+  .lang-btn.active,
+  .lang-btn:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #12202a;
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 300px minmax(0, 1fr);
+    max-width: 1500px;
+    margin: 0 auto;
+  }
+  aside {
+    position: sticky;
+    top: 68px;
+    height: calc(100vh - 68px);
+    overflow: auto;
+    padding: 1.4rem 0;
+    background: var(--sidebar-bg);
+  }
+  .nav-group { display: none; }
+  .nav-group.active { display: block; }
+  .nav-label {
+    padding: 0 1.4rem 0.6rem;
+    color: #6d8098;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .nav-link {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.7rem;
+    padding: 0.58rem 1.4rem;
+    color: var(--sidebar-text);
+    text-decoration: none;
+    border-left: 3px solid transparent;
+    transition: 0.18s ease;
+    font-size: 0.86rem;
+    line-height: 1.25;
+  }
+  .nav-link-resource {
+    margin-top: 0.3rem;
+    color: #fff;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+  }
+  .nav-link-section {
+    padding-left: 2.35rem;
+    font-size: 0.8rem;
+  }
+  .nav-link:hover,
+  .nav-link.active {
+    color: var(--accent);
+    background: rgba(126, 200, 200, 0.08);
+    border-left-color: var(--accent);
+  }
+  .nav-link .nav-bullet {
+    flex: 0 0 auto;
+    font-size: 0.75rem;
+    opacity: 0.8;
+  }
+
+  main {
+    padding: 2rem 2rem 4rem;
+  }
+  .lang-content { display: none; }
+  .lang-content.active { display: block; }
+
+  .hero {
+    position: relative;
+    overflow: hidden;
+    background: radial-gradient(circle at top right, rgba(126, 200, 200, 0.25), transparent 40%), linear-gradient(135deg, #1b2a3a 0%, #243548 100%);
+    color: #fff;
+    border-radius: 24px;
+    padding: 2.1rem 2rem 1.8rem;
+    box-shadow: 0 18px 40px rgba(27, 42, 58, 0.15);
+    margin-bottom: 2rem;
+  }
+  .hero-eyebrow {
+    display: none;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.3rem 0.85rem;
+    border-radius: 999px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-family: 'Syne', sans-serif;
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .hero-eyebrow.active { display: inline-flex; }
+  .hero h1 {
+    margin: 0;
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.7rem, 3vw, 2.5rem);
+    line-height: 1.1;
+  }
+  .hero-title { display: none; }
+  .hero-title.active { display: block; }
+  .hero-subtitle {
+    margin-top: 0.6rem;
+    font-size: 0.95rem;
+    color: rgba(255,255,255,0.7);
+    line-height: 1.5;
+  }
+
+  .resource-block {
+    scroll-margin-top: 90px;
+    margin-bottom: 2rem;
+  }
+  .resource-header {
+    display: flex;
+    align-items: center;
+    gap: 0.95rem;
+    padding: 1.15rem 1.2rem;
+    border: 1px solid rgba(27, 42, 58, 0.06);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.65);
+    margin-bottom: 1rem;
+  }
+  .resource-header h2 {
+    margin: 0;
+    font-family: 'Syne', sans-serif;
+    font-size: 1.45rem;
+  }
+  .resource-kicker {
+    margin: 0 0 0.18rem;
+    color: var(--text-muted);
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .content-section {
+    scroll-margin-top: 90px;
+    margin-bottom: 1.1rem;
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    margin-bottom: 0.7rem;
+  }
+  .section-icon {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(126, 200, 200, 0.22), rgba(163, 217, 198, 0.25));
+    font-size: 1.15rem;
+  }
+  .section-header h3 {
+    margin: 0;
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem;
+  }
+  .card {
+    background: rgba(255, 255, 255, 0.90);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 1.3rem 1.4rem;
+    box-shadow: var(--shadow);
+  }
+  .card > :first-child { margin-top: 0; }
+  .card > :last-child { margin-bottom: 0; }
+  .card h1,
+  .card h2,
+  .card h3,
+  .card h4 {
+    font-family: 'Syne', sans-serif;
+    margin-top: 0;
+    color: var(--text);
+  }
+  .card p,
+  .card li {
+    line-height: 1.7;
+    color: #334155;
+  }
+  .card ul,
+  .card ol { padding-left: 1.2rem; }
+  .card img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 1rem auto;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+  .card figure {
+    max-width: 100%;
+    margin: 1rem 0;
+  }
+  .card figcaption {
+    margin-top: 0.45rem;
+    color: var(--text-muted);
+    font-size: 0.88rem;
+    text-align: center;
+  }
+  .card pre {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+  .card blockquote {
+    margin: 1rem 0;
+    padding: 0.9rem 1rem;
+    border-left: 4px solid var(--accent);
+    background: var(--info-bg);
+    border-radius: 0 12px 12px 0;
+  }
+  .card table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .card th,
+  .card td {
+    min-width: 140px;
+    padding: 0.7rem;
+    border: 1px solid var(--border);
+    vertical-align: top;
+    text-align: left;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+  .card th {
+    background: var(--info-bg);
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+  }
+
+  .info-box {
+    margin: 1rem 0;
+    padding: 1rem 1.2rem;
+    border-radius: 12px;
+    border-left: 4px solid var(--info-border);
+    background: var(--info-bg);
+  }
+  .info-box.warning {
+    border-left-color: var(--warning-border);
+    background: var(--warning-bg);
+  }
+  .info-box.success {
+    border-left-color: var(--success-border);
+    background: var(--success-bg);
+  }
+  .info-box-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.88rem;
+    margin-bottom: 0.4rem;
+    color: var(--text);
+  }
+  .info-box p { margin: 0.3rem 0; }
+
+  /* Major section visual differentiation */
+  .major-section {
+    scroll-margin-top: 90px;
+    margin-bottom: 2.2rem;
+    border-radius: 20px;
+    overflow: hidden;
+  }
+  .major-section-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.1rem 1.4rem;
+    color: #fff;
+    background: linear-gradient(135deg, #1b2a3a 0%, #2a4054 100%);
+  }
+  .major-section-header.theme-blue {
+    background: linear-gradient(135deg, #1a5276 0%, #2a7a8a 100%);
+  }
+  .major-section-header.theme-teal {
+    background: linear-gradient(135deg, #1a6b5a 0%, #2a8a7a 100%);
+  }
+  .major-section-header.theme-navy {
+    background: linear-gradient(135deg, #1b2a3a 0%, #34495e 100%);
+  }
+  .major-section-header.theme-copper {
+    background: linear-gradient(135deg, #6b4423 0%, #8a6a3a 100%);
+  }
+  .major-section-header.theme-purple {
+    background: linear-gradient(135deg, #4a3060 0%, #6a5090 100%);
+  }
+  .major-section-num {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    flex: 0 0 42px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.18);
+    font-family: 'Syne', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: #fff;
+  }
+  .major-section-header h2 {
+    margin: 0;
+    font-family: 'Syne', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    line-height: 1.25;
+  }
+  .major-section-body {
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid var(--border);
+    border-top: none;
+    border-radius: 0 0 20px 20px;
+    padding: 1.4rem;
+  }
+  .major-section-body > :first-child { margin-top: 0; }
+  .major-section-body > :last-child { margin-bottom: 0; }
+  .major-section-body h3 {
+    font-family: 'Syne', sans-serif;
+    margin-top: 1.2rem;
+    color: var(--text);
+  }
+  .major-section-body p,
+  .major-section-body li {
+    line-height: 1.7;
+    color: #334155;
+  }
+  .major-section-body ul,
+  .major-section-body ol { padding-left: 1.2rem; }
+  .major-section-body table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    display: block;
+    overflow-x: auto;
+  }
+  .major-section-body th,
+  .major-section-body td {
+    min-width: 130px;
+    padding: 0.7rem;
+    border: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .major-section-body th {
+    background: var(--info-bg);
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+  }
+  .major-section-body blockquote {
+    margin: 1rem 0;
+    padding: 0.9rem 1rem;
+    border-left: 4px solid var(--accent);
+    background: var(--info-bg);
+    border-radius: 0 12px 12px 0;
+  }
+
+  .prompt-example {
+    margin: 1rem 0;
+    padding: 1rem 1.2rem;
+    border-radius: 12px;
+    background: #1b2a3a;
+    color: #d4e8f0;
+    font-family: 'DM Sans', monospace;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .prompt-label {
+    display: inline-block;
+    padding: 0.15rem 0.6rem;
+    border-radius: 999px;
+    background: var(--accent);
+    color: #1b2a3a;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.6rem;
+  }
+
+  footer {
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 1.5rem 2rem 2rem;
+    color: #64748b;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    text-align: center;
+  }
+  footer a {
+    color: #2a7a8a;
+    text-decoration: none;
+  }
+  footer a:hover { text-decoration: underline; }
+  .cc-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+  .cc-badge img { height: 22px; }
+
+  /* Mobile menu toggle */
+  .menu-toggle {
+    display: none;
+    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(126,200,200,0.12);
+    color: #fff;
+    padding: 0.45rem 0.8rem;
+    border-radius: 10px;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.18s ease;
+  }
+  .menu-toggle:hover {
+    background: var(--accent);
+    color: #1b2a3a;
+  }
+
+  @media (max-width: 960px) {
+    .layout { grid-template-columns: 1fr; }
+    aside {
+      position: static;
+      height: auto;
+      padding: 0;
+      display: none;
+    }
+    aside.open {
+      display: block;
+      padding: 1rem 0;
+    }
+    .menu-toggle { display: block; }
+    main { padding-top: 1.2rem; }
+  }
+
+  @media (max-width: 640px) {
+    header {
+      height: auto;
+      flex-wrap: wrap;
+      padding: 0.8rem 1rem;
+      gap: 0.6rem;
+    }
+    .brand {
+      gap: 0.6rem;
+      font-size: 0.9rem;
+    }
+    .brand-logo { width: 34px; height: 34px; flex: 0 0 34px; }
+    .header-actions {
+      width: 100%;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    .course-home-link {
+      font-size: 0.72rem;
+      padding: 0.4rem 0.7rem;
+    }
+    .menu-toggle {
+      width: 100%;
+      text-align: center;
+    }
+    main { padding: 0.8rem 0.8rem 3rem; }
+    .hero {
+      padding: 1.3rem 1rem;
+      border-radius: 16px;
+      margin-bottom: 1.2rem;
+    }
+    .hero h1 { font-size: 1.4rem; }
+    .hero-subtitle { font-size: 0.82rem; }
+    .resource-header {
+      align-items: flex-start;
+      padding: 0.9rem;
+      border-radius: 14px;
+      gap: 0.7rem;
+    }
+    .resource-header h2 { font-size: 1.15rem; }
+    .section-icon {
+      width: 34px;
+      height: 34px;
+      font-size: 1rem;
+      border-radius: 10px;
+    }
+    .section-header h3 { font-size: 0.98rem; }
+    .card {
+      padding: 1rem;
+      border-radius: 14px;
+    }
+    .major-section { border-radius: 14px; }
+    .major-section-header {
+      padding: 0.9rem 1rem;
+      gap: 0.7rem;
+    }
+    .major-section-num {
+      width: 34px;
+      height: 34px;
+      flex: 0 0 34px;
+      font-size: 1rem;
+      border-radius: 8px;
+    }
+    .major-section-header h2 { font-size: 1rem; }
+    .major-section-body {
+      padding: 1rem;
+      border-radius: 0 0 14px 14px;
+    }
+    .major-section-body th,
+    .major-section-body td {
+      min-width: 110px;
+      padding: 0.5rem;
+      font-size: 0.85rem;
+    }
+    .card h3 { font-size: 1rem; }
+    .card p, .card li { font-size: 0.92rem; }
+    .card th,
+    .card td {
+      min-width: 110px;
+      padding: 0.5rem;
+      font-size: 0.85rem;
+      line-height: 1.4;
+    }
+    .info-box {
+      padding: 0.85rem 1rem;
+      border-radius: 10px;
+    }
+    .info-box-title { font-size: 0.82rem; }
+    .info-box p, .info-box li { font-size: 0.88rem; }
+    .prompt-example {
+      padding: 0.85rem 0.9rem;
+      font-size: 0.8rem;
+      line-height: 1.55;
+      border-radius: 10px;
+      overflow-x: auto;
+    }
+    .prompt-label { font-size: 0.65rem; }
+    footer { padding: 1.2rem 1rem 1.5rem; font-size: 0.78rem; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <svg class="brand-logo" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="circleGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+          <stop offset="0%" style="stop-color:#a3d9c6;stop-opacity:1"/>
+          <stop offset="50%" style="stop-color:#a8d8ea;stop-opacity:1"/>
+          <stop offset="100%" style="stop-color:#7ec8c8;stop-opacity:1"/>
+        </linearGradient>
+      </defs>
+      <circle cx="60" cy="60" r="52" fill="none" stroke="url(#circleGrad)" stroke-width="5.5"/>
+      <text x="60" y="69" text-anchor="middle" fill="#ffffff" font-family="'Syne',sans-serif" font-size="30" font-weight="800" letter-spacing="3">CFR</text>
+    </svg>
+    <div class="brand-text">CEFIRE <span>IA i PC</span></div>
+  </div>
+  <div class="header-actions">
+    <a class="course-home-link" href="https://aules.edu.gva.es/formaciodelprofessorat/course/view.php?id=40247" data-label-va="← Tornar al curs" data-label-es="← Volver al curso">← Tornar al curs</a>
+    <button class="menu-toggle" type="button" id="menuToggle">☰ Índex</button>
+  </div>
+</header>
+
+<div class="layout">
+  <aside>
+    <nav id="nav-va" class="nav-group active">
+      <div class="nav-label">Valencià</div>
+      <a class="nav-link nav-link-resource" href="#va-modul-1"><span class="nav-bullet">◆</span><span>Mòdul 1: Introducció a la IA generativa</span></a>
+      <a class="nav-link nav-link-section" href="#va-visio-general"><span class="nav-bullet">•</span><span>Visió general</span></a>
+      <a class="nav-link nav-link-section" href="#va-que-es-ia"><span class="nav-bullet">•</span><span>Què és la intel·ligència artificial</span></a>
+      <a class="nav-link nav-link-section" href="#va-etica"><span class="nav-bullet">•</span><span>Ètica de l'ús de la IA en educació</span></a>
+      <a class="nav-link nav-link-section" href="#va-riscos"><span class="nav-bullet">•</span><span>Riscos habituals</span></a>
+      <a class="nav-link nav-link-section" href="#va-rol-docent"><span class="nav-bullet">•</span><span>El rol del docent amb IA</span></a>
+      <a class="nav-link nav-link-section" href="#va-ia-corporativa"><span class="nav-bullet">🔒</span><span>IA corporativa @edu.gva.es</span></a>
+      <a class="nav-link nav-link-section" href="#va-proteccio-dades"><span class="nav-bullet">🛡️</span><span>Protecció de dades i Copilot</span></a>
+      <a class="nav-link nav-link-section" href="#va-alumnat"><span class="nav-bullet">🎓</span><span>Comptes @alu.gva.es i alumnat</span></a>
+    </nav>
+    <nav id="nav-es" class="nav-group">
+      <div class="nav-label">Castellano</div>
+      <a class="nav-link nav-link-resource" href="#es-modulo-1"><span class="nav-bullet">◆</span><span>Módulo 1: Introducción a la IA generativa</span></a>
+      <a class="nav-link nav-link-section" href="#es-vision-general"><span class="nav-bullet">•</span><span>Visión general</span></a>
+      <a class="nav-link nav-link-section" href="#es-que-es-ia"><span class="nav-bullet">•</span><span>Qué es la inteligencia artificial</span></a>
+      <a class="nav-link nav-link-section" href="#es-etica"><span class="nav-bullet">•</span><span>Ética del uso de la IA en educación</span></a>
+      <a class="nav-link nav-link-section" href="#es-riesgos"><span class="nav-bullet">•</span><span>Riesgos habituales</span></a>
+      <a class="nav-link nav-link-section" href="#es-rol-docente"><span class="nav-bullet">•</span><span>El rol del docente con IA</span></a>
+      <a class="nav-link nav-link-section" href="#es-ia-corporativa"><span class="nav-bullet">🔒</span><span>IA corporativa @edu.gva.es</span></a>
+      <a class="nav-link nav-link-section" href="#es-proteccion-datos"><span class="nav-bullet">🛡️</span><span>Protección de datos y Copilot</span></a>
+      <a class="nav-link nav-link-section" href="#es-alumnado"><span class="nav-bullet">🎓</span><span>Cuentas @alu.gva.es y alumnado</span></a>
+    </nav>
+  </aside>
+
+  <main>
+    <section class="hero">
+      <div id="hero-eyebrow-va" class="hero-eyebrow active">● Fonaments · IA generativa · IA corporativa · protecció de dades</div>
+      <div id="hero-eyebrow-es" class="hero-eyebrow">● Fundamentos · IA generativa · IA corporativa · protección de datos</div>
+      <h1 id="hero-title-va" class="hero-title active">Mòdul 1: Introducció a la IA generativa i IA corporativa</h1>
+      <h1 id="hero-title-es" class="hero-title">Módulo 1: Introducción a la IA generativa e IA corporativa</h1>
+      <p class="hero-subtitle">Conselleria d'Educació, Universitats i Ocupació · Generalitat Valenciana</p>
+      <div class="lang-switcher">
+        <button class="lang-btn active" type="button" data-lang="va">Valencià</button>
+        <button class="lang-btn" type="button" data-lang="es">Castellano</button>
+      </div>
+    </section>
+
+    <!-- ==================== VALENCIÀ ==================== -->
+    <div id="content-va" class="lang-content active">
+<article id="va-modul-1" class="resource-block">
+  <div class="resource-header">
+    <div class="section-icon">✨</div>
+    <div>
+      <p class="resource-kicker">CEFIRE d'IA i Pensament Computacional</p>
+      <h2>Mòdul 1: Introducció a la IA generativa per a docents</h2>
+    </div>
+  </div>
+
+<!-- Visió general -->
+<section id="va-visio-general" class="content-section">
+  <div class="section-header">
+    <div class="section-icon">•</div>
+    <h3>Visió general</h3>
+  </div>
+  <div class="card">
+<p>Este mòdul no és tècnic. L'objectiu és que, abans de començar a crear amb IA, tinguem un mapa clar de què és esta tecnologia, què pot fer, què no pot fer i quines responsabilitats implica usar-la en un context educatiu.</p>
+<p>A més dels fonaments de la IA generativa, en este mòdul presentem la <strong>IA corporativa de la Generalitat Valenciana</strong> (Microsoft Copilot integrat en els comptes <code>@edu.gva.es</code>), el marc de protecció de dades que la sustenta i les primeres passes per començar a usar-la de manera segura i responsable.</p>
+<hr />
+  </div>
+</section>
+
+<!-- Què és la intel·ligència artificial -->
+<section id="va-que-es-ia" class="major-section">
+  <div class="major-section-header theme-blue">
+    <div class="major-section-num">01</div>
+    <h2>🤖 Què és la intel·ligència artificial</h2>
+  </div>
+  <div class="major-section-body">
+<h3>Però… què és la intel·ligència artificial?</h3>
+<p>Abans de parlar d'IA generativa, convé entendre què és la <strong>intel·ligència artificial</strong> en termes generals. La IA és una branca de la informàtica que busca crear sistemes capaços de realitzar tasques que, quan les fa un ésser humà, requerixen intel·ligència: comprendre el llenguatge, reconéixer imatges, prendre decisions, resoldre problemes o aprendre de l'experiència.</p>
+<p>La IA no és una tecnologia nova: els seus orígens es remunten als anys 50 del segle passat. El que ha canviat en els últims anys és la seua <strong>capacitat i accessibilitat</strong>. Gràcies a l'augment de la potència de càlcul, la disponibilitat de grans quantitats de dades i els avanços en algorismes d'aprenentatge, la IA ha passat de ser un camp d'investigació acadèmica a una ferramenta present en la vida quotidiana: des dels filtres del correu electrònic fins als assistents de veu, passant per les recomanacions de contingut, els sistemes de navegació o els traductors automàtics.</p>
+<p>En educació, la IA ja estava present de forma invisible en moltes plataformes (correctors ortogràfics, sistemes de recomanació, anàlisi de dades). El que ha canviat amb l'aparició de la <strong>IA generativa</strong> és que ara el docent pot interactuar directament amb estos sistemes per a crear, adaptar i transformar contingut educatiu.</p>
+
+<h3>Què és la IA generativa?</h3>
+<p>La <strong>intel·ligència artificial generativa</strong> és un tipus de sistema informàtic capaç de produir text, imatges, codi o àudio a partir d'instruccions en llenguatge natural. Els models més coneguts (ChatGPT, Gemini, Copilot, Claude) són <strong>models de llenguatge de gran escala</strong> (LLM): han sigut entrenats amb enormes quantitats de text i han aprés a predir quina paraula, frase o fragment de codi segueix a continuació, donat un context.</p>
+<p>Açò té una implicació important: <strong>la IA no "sap" coses en el sentit humà</strong>. Genera respostes estadísticament probables basant-se en patrons del text amb el qual va ser entrenada. De vegades ixes respostes són brillants; altres vegades són plausibles però incorrectes.</p>
+<p>Dins d'este ecosistema convé distingir algunes idees base:</p>
+<ul>
+<li><strong>Aprenentatge automàtic (Machine Learning):</strong> la màquina aprén patrons a partir d'exemples.</li>
+<li><strong>Aprenentatge profund (Deep Learning):</strong> una forma més complexa d'aprenentatge basada en xarxes neuronals.</li>
+<li><strong>IA estreta (ANI):</strong> la IA que usem hui en educació; resol tasques concretes, no "entén tot" com una persona.</li>
+</ul>
+<h3>Chatbots i prompts</h3>
+<p>La majoria de docents usa la IA a través de <strong>chatbots</strong>, que permeten conversar en llenguatge natural amb els models. Exemples habituals són Microsoft Copilot (amb el compte <code>@edu.gva.es</code>), ChatGPT, Gemini o Claude.</p>
+<p>La peça clau és el <strong>prompt</strong> (la instrucció que li dones a la IA). La qualitat de la resposta depén directament de la qualitat del prompt: com més clar, contextualitzat i específic siga, més útil serà el resultat.</p>
+
+<h3>Anatomia d'un bon prompt</h3>
+<p>Un prompt eficaç sol incloure quatre elements:</p>
+<table>
+<thead><tr><th>Element</th><th>Què és</th><th>Exemple</th></tr></thead>
+<tbody>
+<tr><td><strong>Rol</strong></td><td>Indica a la IA <em>qui ha de ser</em>: un perfil professional amb experiència concreta.</td><td>«Eres un mestre especialista en pedagogia inclusiva a primària.»</td></tr>
+<tr><td><strong>Context</strong></td><td>Explica la <em>situació</em>: etapa, matèria, característiques de l'alumnat, objectiu pedagògic.</td><td>«Treballe amb un grup de 4t de primària amb 3 alumnes amb dislèxia.»</td></tr>
+<tr><td><strong>Tasca</strong></td><td>Defineix <em>què vols exactament</em>: generar, resumir, adaptar, avaluar, comparar…</td><td>«Crea una activitat de comprensió lectora adaptada.»</td></tr>
+<tr><td><strong>Format</strong></td><td>Especifica <em>com vols el resultat</em>: longitud, estructura, to, idioma.</td><td>«En valencià, format taula, màxim 200 paraules.»</td></tr>
+</tbody>
+</table>
+
+<h3>Com millorar un prompt</h3>
+<p>Si la primera resposta no és la que esperaves, no canvies de tema: <strong>itera sobre el mateix prompt</strong>. Estes tècniques ajuden a refinar els resultats:</p>
+<ul>
+<li><strong>Afig restriccions:</strong> «No uses vocabulari tècnic», «Limita la resposta a 5 punts», «Escriu-ho com si fora per a alumnat de 8 anys».</li>
+<li><strong>Dona exemples:</strong> mostra un model del que vols. «Segueix este format: [exemple]». Açò es coneix com <em>few-shot prompting</em>.</li>
+<li><strong>Demana que raone pas a pas:</strong> «Explica el teu raonament abans de donar la resposta final». Açò millora la qualitat en tasques complexes (<em>chain-of-thought</em>).</li>
+<li><strong>Reformula el que no funciona:</strong> si la IA dona una resposta massa genèrica, afig detall; si és massa llarga, demana concreció; si el to no és adequat, indica'l explícitament.</li>
+<li><strong>Divideix tasques grans:</strong> en compte de demanar «Crea una unitat didàctica completa», divideix-ho: primer els objectius, després les activitats, després l'avaluació.</li>
+<li><strong>Usa instruccions negatives:</strong> «No inventes dades», «No cites fonts que no existisquen», «No uses un to condescendent».</li>
+</ul>
+
+<div class="info-box">
+<div class="info-box-title">💡 Regla d'or</div>
+<p>Si no li expliques a la IA el que necessites amb la mateixa claredat amb la qual li ho explicaries a un company de claustre que no coneix el teu grup, el resultat serà genèric. <strong>El context pedagògic és el que converteix una resposta correcta en una resposta útil.</strong></p>
+</div>
+<h3>El que la IA fa bé</h3>
+<ul>
+<li>Generar esborranys de text, codi o activitats a partir d'un model.</li>
+<li>Explicar conceptes o errors amb un llenguatge adaptat.</li>
+<li>Transformar, resumir o reformatar contingut existent.</li>
+<li>Accelerar tasques repetitives amb un patró clar.</li>
+</ul>
+<h3>El que la IA no fa bé</h3>
+<ul>
+<li>Verificar l'exactitud de les seues pròpies respostes.</li>
+<li>Citar fonts reals (pot inventar-les).</li>
+<li>Raonar de manera genuïna sobre temes que no ha vist.</li>
+<li>Entendre el context pedagògic de la teua aula si no li ho expliques.</li>
+</ul>
+<hr />
+  </div>
+</section>
+
+<!-- Ètica -->
+<section id="va-etica" class="major-section">
+  <div class="major-section-header theme-teal">
+    <div class="major-section-num">02</div>
+    <h2>⚖️ Ètica de l'ús de la IA en educació</h2>
+  </div>
+  <div class="major-section-body">
+<p>Usar IA en el treball docent no és només una qüestió tècnica. Implica decisions sobre autoria, privadesa, transparència i equitat que convé tindre clares des del principi.</p>
+<h3>Autoria i transparència</h3>
+<p>Quan uses IA per a crear un recurs educatiu, <strong>l'autoria intel·lectual continua sent teua</strong>: tu defineixes l'objectiu, el criteri pedagògic i la idoneïtat del resultat. La IA és una ferramenta, com ho és un processador de text.</p>
+<p>No obstant això, la transparència importa: informa el teu alumnat quan un recurs ha sigut creat amb suport d'IA, especialment si es tracta de contingut avaluable. Si compareixes materials amb altres docents, indica quines parts han sigut generades o assistides per IA.</p>
+<h3>Privadesa i dades de l'alumnat</h3>
+<p>Este és el punt més crític des del punt de vista legal:</p>
+<ul>
+<li><strong>No introduïsques dades personals de l'alumnat</strong> en cap sistema d'IA comercial (noms, notes, informació familiar, expedients).</li>
+<li>Els sistemes d'IA generativa en les seues versions gratuïtes poden usar les dades que els proporciones per a millorar els seus models. Llig els termes d'ús.</li>
+<li>Si treballes amb normativa educativa específica (LOPDGDD, RGPD), consulta si l'ús de determinades ferramentes està cobert pels acords del teu centre o administració.</li>
+</ul>
+<div class="info-box warning">
+<div class="info-box-title">⚠️ Regla pràctica</div>
+<p>No escrigues en el xat d'una IA comercial res que no publicaries en un tauler d'anuncis del centre. L'excepció és <strong>Microsoft Copilot amb el compte @edu.gva.es</strong>, que compta amb un conveni específic de protecció de dades (veure apartat dedicat més avall).</p>
+</div>
+<h3>Biaixos en els models</h3>
+<p>Els LLM reproduïxen biaixos presents en les dades amb les quals van ser entrenats: biaixos de gènere, culturals, lingüístics o ideològics. Açò afecta especialment: exemples i situacions que genera per defecte, representació de cultures, èpoques o perspectives minoritàries, i simplificacions del currículum adaptades a estàndards anglosaxons.</p>
+<p>El criteri docent és la primera línia de revisió. Si alguna cosa et sembla esbiaixada o incorrecta, ho és.</p>
+<h3>Citar i referenciar l'ús d'IA</h3>
+<p>Quan uses contingut generat amb IA en materials educatius, convé explicitar-ho i citar la ferramenta per a reforçar la transparència i la integritat acadèmica.</p>
+<p>Exemple de referència: <em>OpenAI. (2024). ChatGPT (versió GPT-4) [Model de llenguatge de gran escala]. https://chat.openai.com</em></p>
+<p>Si es tracta d'imatges generades, afig també el prompt utilitzat i el context d'ús.</p>
+<hr />
+  </div>
+</section>
+
+<!-- Riscos -->
+<section id="va-riscos" class="major-section">
+  <div class="major-section-header theme-copper">
+    <div class="major-section-num">03</div>
+    <h2>⚠️ Riscos habituals a tindre en compte</h2>
+  </div>
+  <div class="major-section-body">
+<h3>Al·lucinacions</h3>
+<p>Els models de llenguatge poden generar informació falsa amb total seguretat aparent: dates incorrectes, cites inventades, lleis que no existixen, referències bibliogràfiques que mai es van publicar.</p>
+<p><strong>Regla pràctica:</strong> qualsevol dada concreta (data, nom, xifra, llei, referència) que vinga de la IA ha de verificar-se en una font primària abans d'usar-la a l'aula.</p>
+<h3>Acumulació d'errors</h3>
+<p>Si parteixes d'una resposta incorrecta i continues construint sobre ella, l'error s'amplifica. Açò és especialment crític en codi: un error estructural en la primera versió pot propagar-se a totes les versions següents.</p>
+<p><strong>Regla pràctica:</strong> treballa per fases curtes i valida cada fase abans de continuar.</p>
+<h3>Dependència i pèrdua d'autonomia</h3>
+<p>Usar IA per a tot pot portar a perdre la capacitat de fer coses sense ella. En el context docent, açò afecta especialment la capacitat d'avaluar críticament el contingut generat.</p>
+<p><strong>Regla pràctica:</strong> entén el que la IA produïx abans d'usar-ho. Si no pots explicar-ho, no ho uses.</p>
+<h3>Homogeneïtzació del contingut</h3>
+<p>Si molts docents usen els mateixos models amb els mateixos prompts, el risc és que el contingut educatiu s'homogeneïtze i perda diversitat pedagògica.</p>
+<p><strong>Regla pràctica:</strong> usa la IA com a punt de partida, no com a destinació. Adapta sempre el resultat al teu context, el teu alumnat i el teu criteri.</p>
+<hr />
+  </div>
+</section>
+
+<!-- Rol del docent -->
+<section id="va-rol-docent" class="major-section">
+  <div class="major-section-header theme-navy">
+    <div class="major-section-num">04</div>
+    <h2>🧰 El rol del docent en un entorn amb IA</h2>
+  </div>
+  <div class="major-section-body">
+<p>La IA no substituïx el docent. El que fa és <strong>ampliar les seues possibilitats</strong>, alliberant temps en tasques repetitives i obrint portes a recursos que abans requerien coneixements tècnics especialitzats o hores de treball. El criteri pedagògic, la responsabilitat sobre el contingut i la relació amb l'alumnat continuen sent competències exclusivament humanes.</p>
+
+<p>Estos són els àmbits on la IA ja està ajudant els docents de manera concreta:</p>
+
+<h3>✍️ Redacció i generació de contingut</h3>
+<p>La IA pot generar esborranys de textos, comunicats a famílies, informes individualitzats, programacions, rúbriques o actes en qüestió de segons. El docent revisa, ajusta el to i valida el contingut, però el punt de partida ja està fet. Açò és especialment útil per a la documentació administrativa que consumeix gran part del temps docent.</p>
+
+<h3>♿ Adaptacions curriculars i atenció a la diversitat</h3>
+<p>Una de les aplicacions més potents: la IA pot adaptar una activitat a diferents nivells de dificultat, simplificar textos per a alumnat amb dificultats de comprensió, generar versions amb suport visual, crear activitats de reforç o ampliació, o proposar adaptacions metodològiques per a necessitats educatives específiques. El que abans requeria hores de treball manual es pot fer en minuts.</p>
+
+<h3>🎨 Creació de recursos motivadors</h3>
+<p>La IA generativa permet crear recursos que abans estaven fora de l'abast de la majoria de docents:</p>
+<ul>
+<li><strong>Imatges personalitzades:</strong> il·lustracions per a contes, flashcards, pòsters temàtics adaptats al contingut que estàs treballant.</li>
+<li><strong>Aplicacions web interactives:</strong> qüestionaris, jocs educatius, simuladors o activitats interactives desplegables en una pàgina web sense necessitat de saber programar.</li>
+<li><strong>Vídeos i presentacions:</strong> guions per a vídeos explicatius, presentacions visuals o storyboards per a projectes audiovisuals.</li>
+<li><strong>Material gamificat:</strong> escape rooms digitals, sistemes de punts, missions i reptes adaptats al currículum.</li>
+</ul>
+
+<h3>🔄 Automatització de tasques repetitives</h3>
+<p>Correcció d'exercicis objectius, generació de llistes, extracció de dades de fulls de càlcul, creació de calendaris, classificació de respostes d'enquestes, generació de resums a partir de textos llargs… La IA pot assumir tasques mecàniques que no requerixen criteri pedagògic però consumeixen hores.</p>
+
+<h3>💡 Inspiració i generació d'idees</h3>
+<p>Quan el docent necessita idees fresques per a una situació d'aprenentatge, un projecte interdisciplinari, una dinàmica de grup o una activitat de tutoria, la IA pot proposar desenes de variants en segons. No substituïx la creativitat docent, però és un excel·lent punt de partida per a evitar el «full en blanc».</p>
+
+<h3>📜 Consulta de normativa i documentació oficial</h3>
+<p>La IA pot ajudar a localitzar, resumir i interpretar normativa educativa (decrets curriculars, resolucions d'inici de curs, instruccions d'avaluació, LOMLOE), sempre que el docent verifique les referències en les fonts oficials. És especialment útil per a navegar documents extensos i trobar la informació rellevant sense llegir-ho tot.</p>
+
+<h3>📊 Anàlisi i visualització de dades</h3>
+<p>A partir de dades d'avaluació, enquestes o resultats acadèmics, la IA pot generar gràfics, detectar patrons, identificar alumnat en risc o crear informes visuals que faciliten la presa de decisions pedagògiques i la comunicació amb famílies i equips directius.</p>
+
+<div class="info-box success">
+<div class="info-box-title">🔑 El que no canvia</div>
+<p>La IA és una ferramenta potent, però el <strong>criteri pedagògic</strong>, la <strong>relació amb l'alumnat</strong>, la <strong>responsabilitat sobre el contingut</strong> i la <strong>decisió final</strong> sobre què és adequat per a cada context segueixen sent exclusivament del docent. La IA proposa; el docent decideix.</p>
+</div>
+<hr />
+  </div>
+</section>
+
+<!-- ==================== NOVES SECCIONS VA ==================== -->
+
+<!-- IA Corporativa @edu.gva.es -->
+<section id="va-ia-corporativa" class="major-section">
+  <div class="major-section-header theme-blue">
+    <div class="major-section-num">05</div>
+    <h2>🔒 IA corporativa: Microsoft Copilot en @edu.gva.es</h2>
+  </div>
+  <div class="major-section-body">
+<p>La Conselleria d'Educació, Universitats i Ocupació de la Generalitat Valenciana ha posat a disposició del professorat una <strong>IA corporativa</strong> a través de <strong>Microsoft Copilot</strong>, integrada en l'ecosistema Microsoft 365 dels comptes <code>@edu.gva.es</code>.</p>
+
+<p>Açò significa que tot el personal docent i no docent amb compte institucional <code>@edu.gva.es</code> pot accedir a Microsoft Copilot amb un nivell de protecció de dades que <strong>no oferixen les versions gratuïtes o comercials</strong> de cap altra IA generativa del mercat.</p>
+
+<div class="info-box success">
+<div class="info-box-title">✅ Què fa diferent la IA corporativa?</div>
+<p>Quan inicies sessió amb el teu compte <code>@edu.gva.es</code> en Microsoft Copilot, les teues converses estan protegides per un <strong>conveni de protecció de dades entre la Generalitat Valenciana i Microsoft</strong> a nivell europeu. Les dades que introduïsques:</p>
+<ul style="margin:0.5rem 0 0 1.2rem;">
+<li><strong>No s'utilitzen per a entrenar el model</strong> de llenguatge.</li>
+<li><strong>No ixen de la Unió Europea</strong> (els servidors estan dins de l'àmbit de la UE).</li>
+<li><strong>No són accessibles per a Microsoft</strong> per a fins comercials.</li>
+<li>Estan subjectes al <strong>RGPD</strong> (Reglament General de Protecció de Dades) i a la <strong>LOPDGDD</strong> espanyola.</li>
+</ul>
+</div>
+
+<h3>Com accedir</h3>
+<p>Per a accedir a Microsoft Copilot amb la protecció corporativa, simplement:</p>
+<ol>
+<li>Ves a <a href="https://copilot.microsoft.com" target="_blank">copilot.microsoft.com</a> o obri Copilot des de qualsevol aplicació Microsoft 365 (Word, Teams, Outlook…).</li>
+<li>Inicia sessió amb el teu compte <code>nomcognoms@edu.gva.es</code>.</li>
+<li>Verifica que apareix la icona de <strong>protecció corporativa</strong> (escut verd) en la interfície. Açò confirma que les teues dades estan protegides.</li>
+</ol>
+
+<div class="info-box warning">
+<div class="info-box-title">⚠️ Important</div>
+<p>Si uses Copilot <strong>sense iniciar sessió</strong> o amb un compte personal (@hotmail.com, @gmail.com, etc.), <strong>NO tens la protecció corporativa</strong>. En eixe cas, les teues dades podrien usar-se per a entrenar models i no estan cobertes pel conveni de la GVA.</p>
+</div>
+<hr />
+  </div>
+</section>
+
+<!-- Protecció de dades i Copilot -->
+<section id="va-proteccio-dades" class="major-section">
+  <div class="major-section-header theme-teal">
+    <div class="major-section-num">06</div>
+    <h2>🛡️ Protecció de dades en Copilot @edu.gva.es</h2>
+  </div>
+  <div class="major-section-body">
+<p>La protecció de dades és el tema central quan parlem d'IA en educació. La bona notícia és que el marc és clar i permet usar la IA de manera àmplia, sempre que es respecten unes regles senzilles.</p>
+
+<h3>Principi general: qualsevol IA per a crear recursos, mai amb dades personals</h3>
+<p>Com a docent, pots usar <strong>qualsevol IA generativa del mercat</strong> (ChatGPT, Claude, Gemini, Copilot, Canva AI o qualsevol altra) per a crear recursos educatius, generar idees, redactar esborranys, preparar activitats o dissenyar materials. <strong>No hi ha cap restricció sobre quina ferramenta uses</strong>, sempre que complisques una condició fonamental:</p>
+
+<div class="info-box warning">
+<div class="info-box-title">⚠️ La regla d'or de la protecció de dades</div>
+<p><strong>No introduïsques mai dades de caràcter personal en cap IA comercial</strong> (noms d'alumnat, notes, informació de famílies, dades del centre que identifiquen persones concretes). Ni en ChatGPT, ni en Claude, ni en Gemini, ni en cap altra versió gratuïta o de pagament.</p>
+<p>La responsabilitat sobre el que s'introdueix en una IA és sempre del docent.</p>
+</div>
+
+<p>Açò significa que pots, per exemple:</p>
+<ul>
+<li>Demanar a qualsevol IA que et genere una activitat de matemàtiques per a 3r de primària. ✅</li>
+<li>Usar Claude per a redactar un comunicat genèric a famílies sobre una excursió. ✅</li>
+<li>Demanar a ChatGPT que t'explique un article 9 del RGPD en termes senzills. ✅</li>
+<li>Crear una rúbrica d'avaluació amb Gemini sense noms ni dades concretes. ✅</li>
+</ul>
+<p>El que <strong>no pots fer</strong> és escriure en cap d'estes ferramentes: «Genera un informe per a l'alumne Pau García del grup 4tB amb les seues notes de matemàtiques». Eixa frase conté dades personals i no ha d'introduir-se mai en una IA comercial.</p>
+
+<h3>Quan necessites usar dades personals: Copilot @edu.gva.es</h3>
+<p>La realitat docent implica que, en moltes tasques, cal treballar amb dades de l'alumnat: redactar informes individualitzats, generar adaptacions amb nom i cognom, analitzar notes d'un grup o preparar comunicats personalitzats. Per a estes situacions, la Generalitat Valenciana ha posat a disposició del professorat la <strong>IA corporativa Microsoft Copilot</strong>, accessible amb el compte <code>@edu.gva.es</code>.</p>
+
+<p>Amb Copilot corporatiu, pots introduir <strong>dades personals bàsiques</strong> necessàries per al teu treball docent:</p>
+<ul>
+<li><strong>Noms i cognoms</strong> de l'alumnat (per a generar informes, adaptacions, comunicats…).</li>
+<li><strong>Notes</strong> i qualificacions.</li>
+<li><strong>Observacions acadèmiques</strong> generals.</li>
+<li><strong>Dades de contacte</strong> de famílies per a gestió administrativa.</li>
+<li><strong>Informació organitzativa</strong> del centre (horaris, grups, assignació de tutories…).</li>
+</ul>
+
+<h3>Què NO pots introduir mai, ni tan sols en Copilot</h3>
+<p>Existixen categories de dades que, per la seua naturalesa sensible, <strong>no s'han d'introduir en cap sistema d'IA</strong>, ni tan sols en la versió corporativa. Són les anomenades <strong>dades de categoria especial</strong> (article 9 del RGPD):</p>
+<ul>
+<li><strong>Dades de salut:</strong> diagnòstics mèdics, informes psicològics, trastorns, medicació, al·lèrgies (exemple: «L'alumne Pau té TDAH i pren metilfenidat»).</li>
+<li><strong>Orientació sexual o identitat de gènere:</strong> qualsevol informació sobre la identitat o orientació d'alumnat o famílies.</li>
+<li><strong>Origen ètnic o racial:</strong> dades sobre ètnia, país d'origen en context discriminatori, pertinença a minories.</li>
+<li><strong>Conviccions religioses o ideològiques:</strong> creences, pràctiques religioses, filiació política de famílies.</li>
+<li><strong>Dades biomètriques:</strong> empremtes, reconeixement facial.</li>
+<li><strong>Condicions sociofamiliars sensibles:</strong> situacions de custòdia, ordres d'allunyament, violència intrafamiliar, situacions de desemparament.</li>
+</ul>
+
+<div class="info-box success">
+<div class="info-box-title">📋 Resum pràctic en tres nivells</div>
+<p><strong>Sense dades personals</strong> → Qualsevol IA (ChatGPT, Claude, Gemini, Copilot…). Usa la que preferisques.</p>
+<p><strong>Amb dades personals bàsiques</strong> (nom, nota, grup) → <strong>Només Copilot @edu.gva.es</strong>.</p>
+<p><strong>Dades de categoria especial</strong> (salut, ètnia, religió, orientació sexual…) → <strong>Mai en cap IA</strong>, ni corporativa ni comercial.</p>
+</div>
+
+<h3>Per què es pot confiar en Copilot @edu.gva.es?</h3>
+<p>La confiança en el sistema corporatiu es basa en tres pilars:</p>
+<ol>
+<li><strong>Conveni contractual amb Microsoft:</strong> la Generalitat Valenciana té un acord de processament de dades (DPA) que obliga Microsoft a tractar les dades dels comptes @edu.gva.es d'acord amb el RGPD europeu.</li>
+<li><strong>No-entrenament del model:</strong> Microsoft ha garantit per contracte que les dades introduïdes en Copilot amb comptes corporatius <strong>no s'utilitzen per a entrenar ni millorar els models de llenguatge</strong>. Les converses es processen i es descarten.</li>
+<li><strong>Residència de dades a la UE:</strong> els servidors que processen les peticions estan ubicats dins de la Unió Europea, complint amb els requisits de transferència internacional de dades del RGPD.</li>
+</ol>
+<hr />
+  </div>
+</section>
+
+<!-- Comptes @alu.gva.es -->
+<section id="va-alumnat" class="major-section">
+  <div class="major-section-header theme-purple">
+    <div class="major-section-num">07</div>
+    <h2>🎓 Comptes @alu.gva.es i ús de la IA per part de l'alumnat</h2>
+  </div>
+  <div class="major-section-body">
+<p>L'alumnat de la Comunitat Valenciana disposa de comptes <code>@alu.gva.es</code> dins de l'ecosistema Microsoft 365 educatiu. No obstant això, la situació respecte a l'accés a la IA és diferent de la del professorat.</p>
+
+<h3>Estat actual de Copilot en comptes @alu.gva.es</h3>
+<div class="info-box">
+<div class="info-box-title">ℹ️ Situació a juliol de 2026</div>
+<p>A dia de hui, els comptes <code>@alu.gva.es</code> <strong>no tenen habilitat Microsoft Copilot</strong> com a assistent d'IA conversacional. L'alumnat no pot accedir a la funcionalitat de xat de Copilot amb el seu compte escolar.</p>
+<p>No obstant això, <strong>s'està treballant activament per a habilitar Copilot per a l'alumnat major de 13 anys</strong>, amb les garanties de protecció de dades adequades i amb el consentiment corresponent.</p>
+</div>
+
+<h3>Què pot fer l'alumnat ara?</h3>
+<p>Tot i que Copilot no està habilitat com a xat d'IA, l'alumnat pot trobar funcionalitats d'IA integrades en algunes aplicacions de Microsoft 365 (com la cerca intel·ligent en Bing o les suggeriments d'escriptura en Word). Estes funcionalitats actuen més com un <strong>buscador millorat</strong> que com un assistent generatiu complet.</p>
+
+<div class="info-box warning">
+<div class="info-box-title">⚠️ Mirada crítica del docent</div>
+<p>Quan l'alumnat utilitza qualsevol ferramenta amb components d'IA (siga dins de Microsoft 365 o fora), és fonamental que el docent:</p>
+<ul style="margin:0.5rem 0 0 1.2rem;">
+<li><strong>Supervise l'ús</strong> i guie l'alumnat en la interpretació dels resultats.</li>
+<li>Fomente la <strong>mirada crítica</strong>: la IA pot donar respostes incorrectes, esbiaixades o descontextualitzades.</li>
+<li>Ensenye a <strong>verificar la veracitat</strong> de les dades obtingudes contrastant amb fonts fiables.</li>
+<li>Establisca <strong>normes clares d'ús</strong> a l'aula: quan és adequat usar IA, quan no, i què constituïx un ús acadèmicament honest.</li>
+<li>Recorde que <strong>la IA mai substituïx el procés d'aprenentatge</strong>: copiar una resposta de la IA no és aprendre.</li>
+</ul>
+</div>
+
+<h3>Recomanacions per a l'aula</h3>
+<p>Mentre s'habilita Copilot per a l'alumnat, recomanem als docents:</p>
+<ul>
+<li>Usar la IA com a <strong>ferramenta de demostració</strong> a l'aula (el docent projecta i l'alumnat observa i analitza).</li>
+<li>Dissenyar activitats on l'alumnat <strong>avalua críticament respostes de la IA</strong> (comparant amb fonts primàries).</li>
+<li>Treballar l'<strong>alfabet digital</strong>: que l'alumnat entenga què és un LLM, per què pot fallar i quins biaixos pot tindre.</li>
+<li>Preparar l'alumnat per a un futur pròxim en què tindran accés directe a estes ferramentes.</li>
+</ul>
+<hr />
+  </div>
+</section>
+
+
+
+</article>
+    </div>
+
+    <!-- ==================== CASTELLANO ==================== -->
+    <div id="content-es" class="lang-content">
+<article id="es-modulo-1" class="resource-block">
+  <div class="resource-header">
+    <div class="section-icon">✨</div>
+    <div>
+      <p class="resource-kicker">CEFIRE de IA y Pensamiento Computacional</p>
+      <h2>Módulo 1: Introducción a la IA generativa para docentes</h2>
+    </div>
+  </div>
+
+<!-- Visión general -->
+<section id="es-vision-general" class="content-section">
+  <div class="section-header">
+    <div class="section-icon">•</div>
+    <h3>Visión general</h3>
+  </div>
+  <div class="card">
+<p>Este módulo no es técnico. El objetivo es que, antes de empezar a crear con IA, tengamos un mapa claro de qué es esta tecnología, qué puede hacer, qué no puede hacer y qué responsabilidades implica usarla en un contexto educativo.</p>
+<p>Además de los fundamentos de la IA generativa, en este módulo presentamos la <strong>IA corporativa de la Generalitat Valenciana</strong> (Microsoft Copilot integrado en las cuentas <code>@edu.gva.es</code>), el marco de protección de datos que la sustenta y los primeros pasos para empezar a usarla de manera segura y responsable.</p>
+<hr />
+  </div>
+</section>
+
+<!-- Qué es la inteligencia artificial -->
+<section id="es-que-es-ia" class="major-section">
+  <div class="major-section-header theme-blue">
+    <div class="major-section-num">01</div>
+    <h2>🤖 Qué es la inteligencia artificial</h2>
+  </div>
+  <div class="major-section-body">
+<h3>Pero… ¿qué es la inteligencia artificial?</h3>
+<p>Antes de hablar de IA generativa, conviene entender qué es la <strong>inteligencia artificial</strong> en términos generales. La IA es una rama de la informática que busca crear sistemas capaces de realizar tareas que, cuando las realiza un ser humano, requieren inteligencia: comprender el lenguaje, reconocer imágenes, tomar decisiones, resolver problemas o aprender de la experiencia.</p>
+<p>La IA no es una tecnología nueva: sus orígenes se remontan a los años 50 del siglo pasado. Lo que ha cambiado en los últimos años es su <strong>capacidad y accesibilidad</strong>. Gracias al aumento de la potencia de cálculo, la disponibilidad de grandes cantidades de datos y los avances en algoritmos de aprendizaje, la IA ha pasado de ser un campo de investigación académica a una herramienta presente en la vida cotidiana: desde los filtros del correo electrónico hasta los asistentes de voz, pasando por las recomendaciones de contenido, los sistemas de navegación o los traductores automáticos.</p>
+<p>En educación, la IA ya estaba presente de forma invisible en muchas plataformas (correctores ortográficos, sistemas de recomendación, análisis de datos). Lo que ha cambiado con la aparición de la <strong>IA generativa</strong> es que ahora el docente puede interactuar directamente con estos sistemas para crear, adaptar y transformar contenido educativo.</p>
+
+<h3>¿Qué es la IA generativa?</h3>
+<p>La <strong>inteligencia artificial generativa</strong> es un tipo de sistema informático capaz de producir texto, imágenes, código o audio a partir de instrucciones en lenguaje natural. Los modelos más conocidos (ChatGPT, Gemini, Copilot, Claude) son <strong>modelos de lenguaje de gran escala</strong> (LLM): han sido entrenados con enormes cantidades de texto y han aprendido a predecir qué palabra, frase o fragmento de código sigue a continuación, dado un contexto.</p>
+<p>Esto tiene una implicación importante: <strong>la IA no "sabe" cosas en el sentido humano</strong>. Genera respuestas estadísticamente probables basándose en patrones del texto con el que fue entrenada. A veces esas respuestas son brillantes; otras veces son plausibles pero incorrectas.</p>
+<p>Dentro de este ecosistema conviene distinguir algunas ideas base:</p>
+<ul>
+<li><strong>Aprendizaje automático (Machine Learning):</strong> la máquina aprende patrones a partir de ejemplos.</li>
+<li><strong>Aprendizaje profundo (Deep Learning):</strong> una forma más compleja de aprendizaje basada en redes neuronales.</li>
+<li><strong>IA estrecha (ANI):</strong> la IA que usamos hoy en educación; resuelve tareas concretas, no "entiende todo" como una persona.</li>
+</ul>
+<h3>Chatbots y prompts</h3>
+<p>La mayoría de docentes usa la IA a través de <strong>chatbots</strong>, que permiten conversar en lenguaje natural con los modelos. Ejemplos habituales son Microsoft Copilot (con la cuenta <code>@edu.gva.es</code>), ChatGPT, Gemini o Claude.</p>
+<p>La pieza clave es el <strong>prompt</strong> (la instrucción que le das a la IA). La calidad de la respuesta depende directamente de la calidad del prompt: cuanto más claro, contextualizado y específico sea, más útil será el resultado.</p>
+
+<h3>Anatomía de un buen prompt</h3>
+<p>Un prompt eficaz suele incluir cuatro elementos:</p>
+<table>
+<thead><tr><th>Elemento</th><th>Qué es</th><th>Ejemplo</th></tr></thead>
+<tbody>
+<tr><td><strong>Rol</strong></td><td>Indica a la IA <em>quién debe ser</em>: un perfil profesional con experiencia concreta.</td><td>«Eres un maestro especialista en pedagogía inclusiva en primaria.»</td></tr>
+<tr><td><strong>Contexto</strong></td><td>Explica la <em>situación</em>: etapa, materia, características del alumnado, objetivo pedagógico.</td><td>«Trabajo con un grupo de 4.º de primaria con 3 alumnos con dislexia.»</td></tr>
+<tr><td><strong>Tarea</strong></td><td>Define <em>qué quieres exactamente</em>: generar, resumir, adaptar, evaluar, comparar…</td><td>«Crea una actividad de comprensión lectora adaptada.»</td></tr>
+<tr><td><strong>Formato</strong></td><td>Especifica <em>cómo quieres el resultado</em>: longitud, estructura, tono, idioma.</td><td>«En valenciano, formato tabla, máximo 200 palabras.»</td></tr>
+</tbody>
+</table>
+
+<h3>Cómo mejorar un prompt</h3>
+<p>Si la primera respuesta no es la que esperabas, no cambies de tema: <strong>itera sobre el mismo prompt</strong>. Estas técnicas ayudan a refinar los resultados:</p>
+<ul>
+<li><strong>Añade restricciones:</strong> «No uses vocabulario técnico», «Limita la respuesta a 5 puntos», «Escríbelo como si fuera para alumnado de 8 años».</li>
+<li><strong>Da ejemplos:</strong> muestra un modelo de lo que quieres. «Sigue este formato: [ejemplo]». Esto se conoce como <em>few-shot prompting</em>.</li>
+<li><strong>Pide que razone paso a paso:</strong> «Explica tu razonamiento antes de dar la respuesta final». Esto mejora la calidad en tareas complejas (<em>chain-of-thought</em>).</li>
+<li><strong>Reformula lo que no funciona:</strong> si la IA da una respuesta demasiado genérica, añade detalle; si es demasiado larga, pide concreción; si el tono no es adecuado, indícalo explícitamente.</li>
+<li><strong>Divide tareas grandes:</strong> en lugar de pedir «Crea una unidad didáctica completa», divídelo: primero los objetivos, después las actividades, después la evaluación.</li>
+<li><strong>Usa instrucciones negativas:</strong> «No inventes datos», «No cites fuentes que no existan», «No uses un tono condescendiente».</li>
+</ul>
+
+<div class="info-box">
+<div class="info-box-title">💡 Regla de oro</div>
+<p>Si no le explicas a la IA lo que necesitas con la misma claridad con la que se lo explicarías a un compañero de claustro que no conoce tu grupo, el resultado será genérico. <strong>El contexto pedagógico es lo que convierte una respuesta correcta en una respuesta útil.</strong></p>
+</div>
+<h3>Lo que la IA hace bien</h3>
+<ul>
+<li>Generar borradores de texto, código o actividades a partir de un modelo.</li>
+<li>Explicar conceptos o errores con un lenguaje adaptado.</li>
+<li>Transformar, resumir o reformatear contenido existente.</li>
+<li>Acelerar tareas repetitivas con un patrón claro.</li>
+</ul>
+<h3>Lo que la IA no hace bien</h3>
+<ul>
+<li>Verificar la exactitud de sus propias respuestas.</li>
+<li>Citar fuentes reales (puede inventarlas).</li>
+<li>Razonar de forma genuina sobre temas que no ha visto.</li>
+<li>Entender el contexto pedagógico de tu aula si no se lo explicas.</li>
+</ul>
+<hr />
+  </div>
+</section>
+
+<!-- Ética -->
+<section id="es-etica" class="major-section">
+  <div class="major-section-header theme-teal">
+    <div class="major-section-num">02</div>
+    <h2>⚖️ Ética del uso de la IA en educación</h2>
+  </div>
+  <div class="major-section-body">
+<p>Usar IA en el trabajo docente no es solo una cuestión técnica. Implica decisiones sobre autoría, privacidad, transparencia y equidad que conviene tener claras desde el principio.</p>
+<h3>Autoría y transparencia</h3>
+<p>Cuando usas IA para crear un recurso educativo, <strong>la autoría intelectual sigue siendo tuya</strong>: tú defines el objetivo, el criterio pedagógico y la idoneidad del resultado. La IA es una herramienta, como lo es un procesador de texto.</p>
+<p>Sin embargo, la transparencia importa: informa a tu alumnado cuando un recurso ha sido creado con apoyo de IA, especialmente si se trata de contenido evaluable. Si compartes materiales con otros docentes, indica qué partes han sido generadas o asistidas por IA.</p>
+<h3>Privacidad y datos del alumnado</h3>
+<p>Este es el punto más crítico desde el punto de vista legal:</p>
+<ul>
+<li><strong>No introduzcas datos personales del alumnado</strong> en ningún sistema de IA comercial (nombres, notas, información familiar, expedientes).</li>
+<li>Los sistemas de IA generativa en sus versiones gratuitas pueden usar los datos que les proporcionas para mejorar sus modelos. Lee los términos de uso.</li>
+<li>Si trabajas con normativa educativa específica (LOPDGDD, RGPD), consulta si el uso de determinadas herramientas está cubierto por los acuerdos de tu centro o administración.</li>
+</ul>
+<div class="info-box warning">
+<div class="info-box-title">⚠️ Regla práctica</div>
+<p>No escribas en el chat de una IA comercial nada que no publicarías en un tablón de anuncios del centro. La excepción es <strong>Microsoft Copilot con la cuenta @edu.gva.es</strong>, que cuenta con un convenio específico de protección de datos (ver apartado dedicado más abajo).</p>
+</div>
+<h3>Sesgos en los modelos</h3>
+<p>Los LLM reproducen sesgos presentes en los datos con los que fueron entrenados: sesgos de género, culturales, lingüísticos o ideológicos. Esto afecta especialmente a: ejemplos y situaciones que genera por defecto, representación de culturas, épocas o perspectivas minoritarias, y simplificaciones del currículo adaptadas a estándares anglosajones.</p>
+<p>El criterio docente es la primera línea de revisión. Si algo te parece sesgado o incorrecto, lo es.</p>
+<h3>Citar y referenciar el uso de IA</h3>
+<p>Cuando uses contenido generado con IA en materiales educativos, conviene explicitarlo y citar la herramienta para reforzar la transparencia y la integridad académica.</p>
+<p>Ejemplo de referencia: <em>OpenAI. (2024). ChatGPT (versión GPT-4) [Modelo de lenguaje grande]. https://chat.openai.com</em></p>
+<p>Si se trata de imágenes generadas, añade también el prompt utilizado y el contexto de uso.</p>
+<hr />
+  </div>
+</section>
+
+<!-- Riesgos -->
+<section id="es-riesgos" class="major-section">
+  <div class="major-section-header theme-copper">
+    <div class="major-section-num">03</div>
+    <h2>⚠️ Riesgos habituales a tener en cuenta</h2>
+  </div>
+  <div class="major-section-body">
+<h3>Alucinaciones</h3>
+<p>Los modelos de lenguaje pueden generar información falsa con total seguridad aparente: fechas incorrectas, citas inventadas, leyes que no existen, referencias bibliográficas que nunca se publicaron.</p>
+<p><strong>Regla práctica:</strong> cualquier dato concreto (fecha, nombre, cifra, ley, referencia) que venga de la IA debe verificarse en una fuente primaria antes de usarlo en el aula.</p>
+<h3>Acumulación de errores</h3>
+<p>Si partes de una respuesta incorrecta y sigues construyendo sobre ella, el error se amplifica. Esto es especialmente crítico en código: un fallo estructural en la primera versión puede propagarse a todas las versiones siguientes.</p>
+<p><strong>Regla práctica:</strong> trabaja por fases cortas y valida cada fase antes de continuar.</p>
+<h3>Dependencia y pérdida de autonomía</h3>
+<p>Usar IA para todo puede llevar a perder la capacidad de hacer cosas sin ella. En el contexto docente, esto afecta especialmente a la capacidad de evaluar críticamente el contenido generado.</p>
+<p><strong>Regla práctica:</strong> entiende lo que la IA produce antes de usarlo. Si no puedes explicarlo, no lo uses.</p>
+<h3>Homogeneización del contenido</h3>
+<p>Si muchos docentes usan los mismos modelos con los mismos prompts, el riesgo es que el contenido educativo se homogenice y pierda diversidad pedagógica.</p>
+<p><strong>Regla práctica:</strong> usa la IA como punto de partida, no como destino. Adapta siempre el resultado a tu contexto, tu alumnado y tu criterio.</p>
+<hr />
+  </div>
+</section>
+
+<!-- Rol del docente -->
+<section id="es-rol-docente" class="major-section">
+  <div class="major-section-header theme-navy">
+    <div class="major-section-num">04</div>
+    <h2>🧰 El rol del docente en un entorno con IA</h2>
+  </div>
+  <div class="major-section-body">
+<p>La IA no sustituye al docente. Lo que hace es <strong>ampliar sus posibilidades</strong>, liberando tiempo en tareas repetitivas y abriendo puertas a recursos que antes requerían conocimientos técnicos especializados u horas de trabajo. El criterio pedagógico, la responsabilidad sobre el contenido y la relación con el alumnado siguen siendo competencias exclusivamente humanas.</p>
+
+<p>Estos son los ámbitos donde la IA ya está ayudando a los docentes de forma concreta:</p>
+
+<h3>✍️ Redacción y generación de contenido</h3>
+<p>La IA puede generar borradores de textos, comunicados a familias, informes individualizados, programaciones, rúbricas o actas en cuestión de segundos. El docente revisa, ajusta el tono y valida el contenido, pero el punto de partida ya está hecho. Esto es especialmente útil para la documentación administrativa que consume gran parte del tiempo docente.</p>
+
+<h3>♿ Adaptaciones curriculares y atención a la diversidad</h3>
+<p>Una de las aplicaciones más potentes: la IA puede adaptar una actividad a diferentes niveles de dificultad, simplificar textos para alumnado con dificultades de comprensión, generar versiones con apoyo visual, crear actividades de refuerzo o ampliación, o proponer adaptaciones metodológicas para necesidades educativas específicas. Lo que antes requería horas de trabajo manual se puede hacer en minutos.</p>
+
+<h3>🎨 Creación de recursos motivadores</h3>
+<p>La IA generativa permite crear recursos que antes estaban fuera del alcance de la mayoría de docentes:</p>
+<ul>
+<li><strong>Imágenes personalizadas:</strong> ilustraciones para cuentos, flashcards, pósters temáticos adaptados al contenido que estás trabajando.</li>
+<li><strong>Aplicaciones web interactivas:</strong> cuestionarios, juegos educativos, simuladores o actividades interactivas desplegables en una página web sin necesidad de saber programar.</li>
+<li><strong>Vídeos y presentaciones:</strong> guiones para vídeos explicativos, presentaciones visuales o storyboards para proyectos audiovisuales.</li>
+<li><strong>Material gamificado:</strong> escape rooms digitales, sistemas de puntos, misiones y retos adaptados al currículo.</li>
+</ul>
+
+<h3>🔄 Automatización de tareas repetitivas</h3>
+<p>Corrección de ejercicios objetivos, generación de listas, extracción de datos de hojas de cálculo, creación de calendarios, clasificación de respuestas de encuestas, generación de resúmenes a partir de textos largos… La IA puede asumir tareas mecánicas que no requieren criterio pedagógico pero consumen horas.</p>
+
+<h3>💡 Inspiración y generación de ideas</h3>
+<p>Cuando el docente necesita ideas frescas para una situación de aprendizaje, un proyecto interdisciplinar, una dinámica de grupo o una actividad de tutoría, la IA puede proponer decenas de variantes en segundos. No sustituye la creatividad docente, pero es un excelente punto de partida para evitar el «folio en blanco».</p>
+
+<h3>📜 Consulta de normativa y documentación oficial</h3>
+<p>La IA puede ayudar a localizar, resumir e interpretar normativa educativa (decretos curriculares, resoluciones de inicio de curso, instrucciones de evaluación, LOMLOE), siempre que el docente verifique las referencias en las fuentes oficiales. Es especialmente útil para navegar documentos extensos y encontrar la información relevante sin leerlo todo.</p>
+
+<h3>📊 Análisis y visualización de datos</h3>
+<p>A partir de datos de evaluación, encuestas o resultados académicos, la IA puede generar gráficos, detectar patrones, identificar alumnado en riesgo o crear informes visuales que faciliten la toma de decisiones pedagógicas y la comunicación con familias y equipos directivos.</p>
+
+<div class="info-box success">
+<div class="info-box-title">🔑 Lo que no cambia</div>
+<p>La IA es una herramienta potente, pero el <strong>criterio pedagógico</strong>, la <strong>relación con el alumnado</strong>, la <strong>responsabilidad sobre el contenido</strong> y la <strong>decisión final</strong> sobre qué es adecuado para cada contexto siguen siendo exclusivamente del docente. La IA propone; el docente decide.</p>
+</div>
+<hr />
+  </div>
+</section>
+
+<!-- ==================== NUEVAS SECCIONES ES ==================== -->
+
+<!-- IA Corporativa @edu.gva.es -->
+<section id="es-ia-corporativa" class="major-section">
+  <div class="major-section-header theme-blue">
+    <div class="major-section-num">05</div>
+    <h2>🔒 IA corporativa: Microsoft Copilot en @edu.gva.es</h2>
+  </div>
+  <div class="major-section-body">
+<p>La Conselleria d'Educació, Universitats i Ocupació de la Generalitat Valenciana ha puesto a disposición del profesorado una <strong>IA corporativa</strong> a través de <strong>Microsoft Copilot</strong>, integrada en el ecosistema Microsoft 365 de las cuentas <code>@edu.gva.es</code>.</p>
+
+<p>Esto significa que todo el personal docente y no docente con cuenta institucional <code>@edu.gva.es</code> puede acceder a Microsoft Copilot con un nivel de protección de datos que <strong>no ofrecen las versiones gratuitas o comerciales</strong> de ninguna otra IA generativa del mercado.</p>
+
+<div class="info-box success">
+<div class="info-box-title">✅ ¿Qué hace diferente a la IA corporativa?</div>
+<p>Cuando inicias sesión con tu cuenta <code>@edu.gva.es</code> en Microsoft Copilot, tus conversaciones están protegidas por un <strong>convenio de protección de datos entre la Generalitat Valenciana y Microsoft</strong> a nivel europeo. Los datos que introduzcas:</p>
+<ul style="margin:0.5rem 0 0 1.2rem;">
+<li><strong>No se utilizan para entrenar el modelo</strong> de lenguaje.</li>
+<li><strong>No salen de la Unión Europea</strong> (los servidores están dentro del ámbito de la UE).</li>
+<li><strong>No son accesibles para Microsoft</strong> con fines comerciales.</li>
+<li>Están sujetos al <strong>RGPD</strong> (Reglamento General de Protección de Datos) y a la <strong>LOPDGDD</strong> española.</li>
+</ul>
+</div>
+
+<h3>Cómo acceder</h3>
+<p>Para acceder a Microsoft Copilot con la protección corporativa, simplemente:</p>
+<ol>
+<li>Ve a <a href="https://copilot.microsoft.com" target="_blank">copilot.microsoft.com</a> o abre Copilot desde cualquier aplicación Microsoft 365 (Word, Teams, Outlook…).</li>
+<li>Inicia sesión con tu cuenta <code>nombreapellidos@edu.gva.es</code>.</li>
+<li>Verifica que aparece el icono de <strong>protección corporativa</strong> (escudo verde) en la interfaz. Esto confirma que tus datos están protegidos.</li>
+</ol>
+
+<div class="info-box warning">
+<div class="info-box-title">⚠️ Importante</div>
+<p>Si usas Copilot <strong>sin iniciar sesión</strong> o con una cuenta personal (@hotmail.com, @gmail.com, etc.), <strong>NO tienes la protección corporativa</strong>. En ese caso, tus datos podrían usarse para entrenar modelos y no están cubiertos por el convenio de la GVA.</p>
+</div>
+<hr />
+  </div>
+</section>
+
+<!-- Protección de datos y Copilot -->
+<section id="es-proteccion-datos" class="major-section">
+  <div class="major-section-header theme-teal">
+    <div class="major-section-num">06</div>
+    <h2>🛡️ Protección de datos en Copilot @edu.gva.es</h2>
+  </div>
+  <div class="major-section-body">
+<p>La protección de datos es el tema central cuando hablamos de IA en educación. La buena noticia es que el marco es claro y permite usar la IA de forma amplia, siempre que se respeten unas reglas sencillas.</p>
+
+<h3>Principio general: cualquier IA para crear recursos, nunca con datos personales</h3>
+<p>Como docente, puedes usar <strong>cualquier IA generativa del mercado</strong> (ChatGPT, Claude, Gemini, Copilot, Canva AI o cualquier otra) para crear recursos educativos, generar ideas, redactar borradores, preparar actividades o diseñar materiales. <strong>No hay ninguna restricción sobre qué herramienta uses</strong>, siempre que cumplas una condición fundamental:</p>
+
+<div class="info-box warning">
+<div class="info-box-title">⚠️ La regla de oro de la protección de datos</div>
+<p><strong>No introduzcas nunca datos de carácter personal en ninguna IA comercial</strong> (nombres de alumnado, notas, información de familias, datos del centro que identifiquen a personas concretas). Ni en ChatGPT, ni en Claude, ni en Gemini, ni en ninguna otra versión gratuita o de pago.</p>
+<p>La responsabilidad sobre lo que se introduce en una IA es siempre del docente.</p>
+</div>
+
+<p>Esto significa que puedes, por ejemplo:</p>
+<ul>
+<li>Pedir a cualquier IA que te genere una actividad de matemáticas para 3.º de primaria. ✅</li>
+<li>Usar Claude para redactar un comunicado genérico a familias sobre una excursión. ✅</li>
+<li>Pedir a ChatGPT que te explique el artículo 9 del RGPD en términos sencillos. ✅</li>
+<li>Crear una rúbrica de evaluación con Gemini sin nombres ni datos concretos. ✅</li>
+</ul>
+<p>Lo que <strong>no puedes hacer</strong> es escribir en ninguna de estas herramientas: «Genera un informe para el alumno Pau García del grupo 4.ºB con sus notas de matemáticas». Esa frase contiene datos personales y no debe introducirse nunca en una IA comercial.</p>
+
+<h3>Cuando necesitas usar datos personales: Copilot @edu.gva.es</h3>
+<p>La realidad docente implica que, en muchas tareas, hay que trabajar con datos del alumnado: redactar informes individualizados, generar adaptaciones con nombre y apellido, analizar notas de un grupo o preparar comunicados personalizados. Para estas situaciones, la Generalitat Valenciana ha puesto a disposición del profesorado la <strong>IA corporativa Microsoft Copilot</strong>, accesible con la cuenta <code>@edu.gva.es</code>.</p>
+
+<p>Con Copilot corporativo, puedes introducir <strong>datos personales básicos</strong> necesarios para tu trabajo docente:</p>
+<ul>
+<li><strong>Nombres y apellidos</strong> del alumnado (para generar informes, adaptaciones, comunicados…).</li>
+<li><strong>Notas</strong> y calificaciones.</li>
+<li><strong>Observaciones académicas</strong> generales.</li>
+<li><strong>Datos de contacto</strong> de familias para gestión administrativa.</li>
+<li><strong>Información organizativa</strong> del centro (horarios, grupos, asignación de tutorías…).</li>
+</ul>
+
+<h3>Qué NO puedes introducir nunca, ni siquiera en Copilot</h3>
+<p>Existen categorías de datos que, por su naturaleza sensible, <strong>no deben introducirse en ningún sistema de IA</strong>, ni siquiera en la versión corporativa. Son los llamados <strong>datos de categoría especial</strong> (artículo 9 del RGPD):</p>
+<ul>
+<li><strong>Datos de salud:</strong> diagnósticos médicos, informes psicológicos, trastornos, medicación, alergias (ejemplo: «El alumno Pau tiene TDAH y toma metilfenidato»).</li>
+<li><strong>Orientación sexual o identidad de género:</strong> cualquier información sobre la identidad u orientación del alumnado o de las familias.</li>
+<li><strong>Origen étnico o racial:</strong> datos sobre etnia, país de origen en contexto discriminatorio, pertenencia a minorías.</li>
+<li><strong>Convicciones religiosas o ideológicas:</strong> creencias, prácticas religiosas, filiación política de las familias.</li>
+<li><strong>Datos biométricos:</strong> huellas dactilares, reconocimiento facial.</li>
+<li><strong>Condiciones sociofamiliares sensibles:</strong> situaciones de custodia, órdenes de alejamiento, violencia intrafamiliar, situaciones de desamparo.</li>
+</ul>
+
+<div class="info-box success">
+<div class="info-box-title">📋 Resumen práctico en tres niveles</div>
+<p><strong>Sin datos personales</strong> → Cualquier IA (ChatGPT, Claude, Gemini, Copilot…). Usa la que prefieras.</p>
+<p><strong>Con datos personales básicos</strong> (nombre, nota, grupo) → <strong>Solo Copilot @edu.gva.es</strong>.</p>
+<p><strong>Datos de categoría especial</strong> (salud, etnia, religión, orientación sexual…) → <strong>Nunca en ninguna IA</strong>, ni corporativa ni comercial.</p>
+</div>
+
+<h3>¿Por qué se puede confiar en Copilot @edu.gva.es?</h3>
+<p>La confianza en el sistema corporativo se basa en tres pilares:</p>
+<ol>
+<li><strong>Convenio contractual con Microsoft:</strong> la Generalitat Valenciana tiene un acuerdo de procesamiento de datos (DPA) que obliga a Microsoft a tratar los datos de las cuentas @edu.gva.es de acuerdo con el RGPD europeo.</li>
+<li><strong>No-entrenamiento del modelo:</strong> Microsoft ha garantizado por contrato que los datos introducidos en Copilot con cuentas corporativas <strong>no se utilizan para entrenar ni mejorar los modelos de lenguaje</strong>. Las conversaciones se procesan y se descartan.</li>
+<li><strong>Residencia de datos en la UE:</strong> los servidores que procesan las peticiones están ubicados dentro de la Unión Europea, cumpliendo con los requisitos de transferencia internacional de datos del RGPD.</li>
+</ol>
+<hr />
+  </div>
+</section>
+
+<!-- Cuentas @alu.gva.es -->
+<section id="es-alumnado" class="major-section">
+  <div class="major-section-header theme-purple">
+    <div class="major-section-num">07</div>
+    <h2>🎓 Cuentas @alu.gva.es y uso de la IA por parte del alumnado</h2>
+  </div>
+  <div class="major-section-body">
+<p>El alumnado de la Comunitat Valenciana dispone de cuentas <code>@alu.gva.es</code> dentro del ecosistema Microsoft 365 educativo. Sin embargo, la situación respecto al acceso a la IA es diferente de la del profesorado.</p>
+
+<h3>Estado actual de Copilot en cuentas @alu.gva.es</h3>
+<div class="info-box">
+<div class="info-box-title">ℹ️ Situación a julio de 2026</div>
+<p>A día de hoy, las cuentas <code>@alu.gva.es</code> <strong>no tienen habilitado Microsoft Copilot</strong> como asistente de IA conversacional. El alumnado no puede acceder a la funcionalidad de chat de Copilot con su cuenta escolar.</p>
+<p>No obstante, <strong>se está trabajando activamente para habilitar Copilot para el alumnado mayor de 13 años</strong>, con las garantías de protección de datos adecuadas y con el consentimiento correspondiente.</p>
+</div>
+
+<h3>¿Qué puede hacer el alumnado ahora?</h3>
+<p>Aunque Copilot no está habilitado como chat de IA, el alumnado puede encontrar funcionalidades de IA integradas en algunas aplicaciones de Microsoft 365 (como la búsqueda inteligente en Bing o las sugerencias de escritura en Word). Estas funcionalidades actúan más como un <strong>buscador mejorado</strong> que como un asistente generativo completo.</p>
+
+<div class="info-box warning">
+<div class="info-box-title">⚠️ Mirada crítica del docente</div>
+<p>Cuando el alumnado utiliza cualquier herramienta con componentes de IA (sea dentro de Microsoft 365 o fuera), es fundamental que el docente:</p>
+<ul style="margin:0.5rem 0 0 1.2rem;">
+<li><strong>Supervise el uso</strong> y guíe al alumnado en la interpretación de los resultados.</li>
+<li>Fomente la <strong>mirada crítica</strong>: la IA puede dar respuestas incorrectas, sesgadas o descontextualizadas.</li>
+<li>Enseñe a <strong>verificar la veracidad</strong> de los datos obtenidos contrastando con fuentes fiables.</li>
+<li>Establezca <strong>normas claras de uso</strong> en el aula: cuándo es adecuado usar IA, cuándo no, y qué constituye un uso académicamente honesto.</li>
+<li>Recuerde que <strong>la IA nunca sustituye el proceso de aprendizaje</strong>: copiar una respuesta de la IA no es aprender.</li>
+</ul>
+</div>
+
+<h3>Recomendaciones para el aula</h3>
+<p>Mientras se habilita Copilot para el alumnado, recomendamos a los docentes:</p>
+<ul>
+<li>Usar la IA como <strong>herramienta de demostración</strong> en el aula (el docente proyecta y el alumnado observa y analiza).</li>
+<li>Diseñar actividades donde el alumnado <strong>evalúe críticamente respuestas de la IA</strong> (comparando con fuentes primarias).</li>
+<li>Trabajar el <strong>alfabeto digital</strong>: que el alumnado entienda qué es un LLM, por qué puede fallar y qué sesgos puede tener.</li>
+<li>Preparar al alumnado para un futuro próximo en el que tendrán acceso directo a estas herramientas.</li>
+</ul>
+<hr />
+  </div>
+</section>
+
+
+
+</article>
+    </div>
+  </main>
+</div>
+
+<footer>
+  <p><strong>CEFIRE d'Intel·ligència Artificial i Pensament Computacional</strong><br>
+  Conselleria d'Educació, Universitats i Ocupació · Generalitat Valenciana</p>
+  <div style="margin-top:0.8rem;">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener" style="display:inline-block;">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 42" style="height:36px; vertical-align:middle;">
+        <rect width="120" height="42" rx="4" fill="#fff" stroke="#aab2bd" stroke-width="1"/>
+        <text x="8" y="16" font-family="Syne,sans-serif" font-size="8" font-weight="700" fill="#333">CREATIVE</text>
+        <text x="8" y="26" font-family="Syne,sans-serif" font-size="8" font-weight="700" fill="#333">COMMONS</text>
+        <circle cx="72" cy="21" r="10" fill="none" stroke="#333" stroke-width="1.2"/>
+        <text x="72" y="25" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="700" fill="#333">BY</text>
+        <circle cx="93" cy="16" r="7" fill="none" stroke="#333" stroke-width="1.2"/>
+        <text x="93" y="19.5" text-anchor="middle" font-family="sans-serif" font-size="8" font-weight="700" fill="#333">NC</text>
+        <circle cx="110" cy="16" r="7" fill="none" stroke="#333" stroke-width="1.2"/>
+        <text x="110" y="19.5" text-anchor="middle" font-family="sans-serif" font-size="8" font-weight="700" fill="#333">SA</text>
+        <text x="93" y="37" text-anchor="middle" font-family="sans-serif" font-size="7" fill="#666">4.0</text>
+      </svg>
+    </a>
+  </div>
+  <p id="cc-va" style="margin-top:0.5rem;">
+    Aquesta obra està subjecta a una llicència <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ca" target="_blank" rel="noopener">Creative Commons Reconeixement-NoComercial-CompartirIgual 4.0 Internacional (CC BY-NC-SA 4.0)</a>.<br>
+    Es permet visualitzar, compartir i adaptar el material sempre que es reconega l'autoria, no se'n faça ús comercial i es mantinga la mateixa llicència.
+  </p>
+  <p id="cc-es" style="margin-top:0.5rem; display:none;">
+    Esta obra está sujeta a una licencia <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es" target="_blank" rel="noopener">Creative Commons Reconocimiento-NoComercial-CompartirIgual 4.0 Internacional (CC BY-NC-SA 4.0)</a>.<br>
+    Se permite visualizar, compartir y adaptar el material siempre que se reconozca la autoría, no se haga uso comercial y se mantenga la misma licencia.
+  </p>
+</footer>
+
+<script>
+  const langButtons = document.querySelectorAll('.lang-btn');
+  const langContents = {
+    va: document.getElementById('content-va'),
+    es: document.getElementById('content-es')
+  };
+  const navGroups = {
+    va: document.getElementById('nav-va'),
+    es: document.getElementById('nav-es')
+  };
+  const heroTitles = {
+    va: document.getElementById('hero-title-va'),
+    es: document.getElementById('hero-title-es')
+  };
+  const heroEyebrows = {
+    va: document.getElementById('hero-eyebrow-va'),
+    es: document.getElementById('hero-eyebrow-es')
+  };
+  const courseHomeLink = document.querySelector('.course-home-link');
+  const ccVa = document.getElementById('cc-va');
+  const ccEs = document.getElementById('cc-es');
+
+  function setLang(lang) {
+    Object.entries(langContents).forEach(([key, node]) => {
+      node.classList.toggle('active', key === lang);
+    });
+    Object.entries(navGroups).forEach(([key, node]) => {
+      node.classList.toggle('active', key === lang);
+    });
+    Object.entries(heroTitles).forEach(([key, node]) => {
+      node.classList.toggle('active', key === lang);
+    });
+    Object.entries(heroEyebrows).forEach(([key, node]) => {
+      node.classList.toggle('active', key === lang);
+    });
+    langButtons.forEach((button) => {
+      button.classList.toggle('active', button.dataset.lang === lang);
+    });
+    if (courseHomeLink) {
+      courseHomeLink.textContent = courseHomeLink.dataset[lang === 'va' ? 'labelVa' : 'labelEs'];
+    }
+    if (ccVa && ccEs) {
+      ccVa.style.display = lang === 'va' ? 'block' : 'none';
+      ccEs.style.display = lang === 'es' ? 'block' : 'none';
+    }
+    const mt = document.getElementById('menuToggle');
+    if (mt && !document.querySelector('aside').classList.contains('open')) {
+      mt.textContent = lang === 'va' ? '☰ Índex' : '☰ Índice';
+    }
+    document.documentElement.lang = lang === 'va' ? 'ca' : 'es';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  langButtons.forEach((button) => {
+    button.addEventListener('click', () => setLang(button.dataset.lang));
+  });
+
+  document.querySelectorAll('.nav-link').forEach((link) => {
+    link.addEventListener('click', () => {
+      document.querySelectorAll('.nav-link').forEach((item) => item.classList.remove('active'));
+      link.classList.add('active');
+      // Close sidebar on mobile after clicking a link
+      const aside = document.querySelector('aside');
+      if (window.innerWidth <= 960 && aside) {
+        aside.classList.remove('open');
+        document.getElementById('menuToggle').textContent = '☰ Índex';
+      }
+    });
+  });
+
+  // Hamburger menu toggle
+  const menuToggle = document.getElementById('menuToggle');
+  if (menuToggle) {
+    menuToggle.addEventListener('click', () => {
+      const aside = document.querySelector('aside');
+      aside.classList.toggle('open');
+      menuToggle.textContent = aside.classList.contains('open') ? '✕ Tancar' : '☰ Índex';
+    });
+  }
+</script>
+</body>
+</html>
