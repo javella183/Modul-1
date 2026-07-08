@@ -1,0 +1,1486 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mòdul 1: Introducció a la IA generativa i IA corporativa @edu.gva.es</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f0f6f8;
+    --surface: #ffffff;
+    --sidebar-bg: #1b2a3a;
+    --sidebar-text: #c0d4e4;
+    --accent: #9bb8d8;
+    --accent-soft: rgba(155, 184, 216, 0.18);
+    --accent-warm: #c4cdef;
+    --accent-green: #c8e0b0;
+    --text: #1b2a3a;
+    --text-muted: #607080;
+    --border: #d4e3ed;
+    --shadow: 0 10px 30px rgba(27, 42, 58, 0.07);
+    --info-bg: #eef3f9;
+    --info-border: #9bb8d8;
+    --warning-bg: #fff8e8;
+    --warning-border: #e8c870;
+    --success-bg: #eaf6f0;
+    --success-border: #7ec8a0;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: linear-gradient(135deg, #eef5e8 0%, #e8eef5 50%, #e4e0f0 100%);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+  }
+  a { color: #4a6a9a; }
+  code {
+    background: #e4eef3;
+    padding: 0.1rem 0.35rem;
+    border-radius: 6px;
+    font-size: 0.92em;
+  }
+
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 68px;
+    padding: 0 1.5rem;
+    background: rgba(27, 42, 58, 0.97);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    color: #fff;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+  }
+  .brand-logo-img {
+    height: 34px;
+    width: auto;
+    filter: brightness(0) invert(1);
+  }
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+  .course-home-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.5rem 0.9rem;
+    border: 1px solid rgba(155, 184, 216, 0.35);
+    border-radius: 999px;
+    color: #f8fafc;
+    text-decoration: none;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    background: rgba(155, 184, 216, 0.12);
+    transition: 0.18s ease;
+  }
+  .course-home-link:hover,
+  .course-home-link:focus-visible {
+    background: #9bb8d8;
+    border-color: #9bb8d8;
+    color: #12202a;
+  }
+  .lang-switcher {
+    display: flex;
+    gap: 0.6rem;
+    margin-top: 1rem;
+  }
+  .lang-btn {
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.75);
+    padding: 0.45rem 1.1rem;
+    border-radius: 999px;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.18s ease;
+  }
+  .lang-btn.active,
+  .lang-btn:hover {
+    background: #9bb8d8;
+    border-color: #9bb8d8;
+    color: #12202a;
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 300px minmax(0, 1fr);
+    max-width: 1500px;
+    margin: 0 auto;
+  }
+  aside {
+    position: sticky;
+    top: 68px;
+    height: calc(100vh - 68px);
+    overflow: auto;
+    padding: 1.4rem 0;
+    background: var(--sidebar-bg);
+  }
+  .nav-group { display: none; }
+  .nav-group.active { display: block; }
+  .nav-label {
+    padding: 0 1.4rem 0.6rem;
+    color: #6d8098;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .nav-link {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.7rem;
+    padding: 0.58rem 1.4rem;
+    color: var(--sidebar-text);
+    text-decoration: none;
+    border-left: 3px solid transparent;
+    transition: 0.18s ease;
+    font-size: 0.86rem;
+    line-height: 1.25;
+  }
+  .nav-link-resource {
+    margin-top: 0.3rem;
+    color: #fff;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+  }
+  .nav-link-section {
+    padding-left: 2.35rem;
+    font-size: 0.8rem;
+  }
+  .nav-link:hover,
+  .nav-link.active {
+    color: var(--accent);
+    background: rgba(155, 184, 216, 0.08);
+    border-left-color: var(--accent);
+  }
+  .nav-link .nav-bullet {
+    flex: 0 0 auto;
+    font-size: 0.75rem;
+    opacity: 0.8;
+  }
+
+  main {
+    padding: 2rem 2rem 4rem;
+  }
+  .lang-content { display: none; }
+  .lang-content.active { display: block; }
+
+  .hero {
+    position: relative;
+    overflow: hidden;
+    background: radial-gradient(circle at top right, rgba(180, 196, 222, 0.3), transparent 40%), linear-gradient(135deg, #1b2a3a 0%, #2a3650 100%);
+    color: #fff;
+    border-radius: 24px;
+    padding: 2.1rem 2rem 1.8rem;
+    box-shadow: 0 18px 40px rgba(27, 42, 58, 0.15);
+    margin-bottom: 2rem;
+  }
+  .hero-eyebrow {
+    display: none;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.3rem 0.85rem;
+    border-radius: 999px;
+    background: rgba(155, 184, 216, 0.2);
+    color: #9bb8d8;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .hero-eyebrow.active { display: inline-flex; }
+  .hero h1 {
+    margin: 0;
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.7rem, 3vw, 2.5rem);
+    line-height: 1.1;
+  }
+  .hero-title { display: none; }
+  .hero-title.active { display: block; }
+  .hero-subtitle {
+    margin-top: 0.6rem;
+    font-size: 0.95rem;
+    color: rgba(255,255,255,0.7);
+    line-height: 1.5;
+  }
+
+  .resource-block {
+    scroll-margin-top: 90px;
+    margin-bottom: 2rem;
+  }
+  .resource-header {
+    display: flex;
+    align-items: center;
+    gap: 0.95rem;
+    padding: 1.15rem 1.2rem;
+    border: 1px solid rgba(27, 42, 58, 0.06);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.65);
+    margin-bottom: 1rem;
+  }
+  .resource-header h2 {
+    margin: 0;
+    font-family: 'Syne', sans-serif;
+    font-size: 1.45rem;
+  }
+  .resource-kicker {
+    margin: 0 0 0.18rem;
+    color: var(--text-muted);
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .content-section {
+    scroll-margin-top: 90px;
+    margin-bottom: 1.1rem;
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    margin-bottom: 0.7rem;
+  }
+  .section-icon {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(155, 184, 216, 0.22), rgba(180, 200, 230, 0.25));
+    font-size: 1.15rem;
+  }
+  .section-header h3 {
+    margin: 0;
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem;
+  }
+  .card {
+    background: rgba(255, 255, 255, 0.90);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 1.3rem 1.4rem;
+    box-shadow: var(--shadow);
+  }
+  .card > :first-child { margin-top: 0; }
+  .card > :last-child { margin-bottom: 0; }
+  .card h1,
+  .card h2,
+  .card h3,
+  .card h4 {
+    font-family: 'Syne', sans-serif;
+    margin-top: 0;
+    color: var(--text);
+  }
+  .card p,
+  .card li {
+    line-height: 1.7;
+    color: #334155;
+  }
+  .card ul,
+  .card ol { padding-left: 1.2rem; }
+  .card img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 1rem auto;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+  .card figure {
+    max-width: 100%;
+    margin: 1rem 0;
+  }
+  .card figcaption {
+    margin-top: 0.45rem;
+    color: var(--text-muted);
+    font-size: 0.88rem;
+    text-align: center;
+  }
+  .card pre {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+  .card blockquote {
+    margin: 1rem 0;
+    padding: 0.9rem 1rem;
+    border-left: 4px solid var(--accent);
+    background: var(--info-bg);
+    border-radius: 0 12px 12px 0;
+  }
+  .card table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .card th,
+  .card td {
+    min-width: 140px;
+    padding: 0.7rem;
+    border: 1px solid var(--border);
+    vertical-align: top;
+    text-align: left;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+  .card th {
+    background: var(--info-bg);
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+  }
+
+  .info-box {
+    margin: 1rem 0;
+    padding: 1rem 1.2rem;
+    border-radius: 12px;
+    border-left: 4px solid var(--info-border);
+    background: var(--info-bg);
+  }
+  .info-box.warning {
+    border-left-color: var(--warning-border);
+    background: var(--warning-bg);
+  }
+  .info-box.success {
+    border-left-color: var(--success-border);
+    background: var(--success-bg);
+  }
+  .info-box-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.88rem;
+    margin-bottom: 0.4rem;
+    color: var(--text);
+  }
+  .info-box p { margin: 0.3rem 0; }
+
+  /* Major section visual differentiation */
+  .major-section {
+    scroll-margin-top: 90px;
+    margin-bottom: 2.2rem;
+    border-radius: 20px;
+    overflow: hidden;
+  }
+  .major-section-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.1rem 1.4rem;
+    color: #fff;
+    background: linear-gradient(135deg, #1b2a3a 0%, #2a4054 100%);
+  }
+  .major-section-header.theme-blue {
+    background: linear-gradient(135deg, #3a5a8a 0%, #5a7aaa 100%);
+  }
+  .major-section-header.theme-teal {
+    background: linear-gradient(135deg, #4a6a3a 0%, #6a8a5a 100%);
+  }
+  .major-section-header.theme-navy {
+    background: linear-gradient(135deg, #1b2a3a 0%, #34495e 100%);
+  }
+  .major-section-header.theme-copper {
+    background: linear-gradient(135deg, #7a5a3a 0%, #9a7a5a 100%);
+  }
+  .major-section-header.theme-purple {
+    background: linear-gradient(135deg, #5a4a7a 0%, #7a6a9a 100%);
+  }
+  .major-section-num {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    flex: 0 0 42px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.18);
+    font-family: 'Syne', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: #fff;
+  }
+  .major-section-header h2 {
+    margin: 0;
+    font-family: 'Syne', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    line-height: 1.25;
+  }
+  .major-section-body {
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid var(--border);
+    border-top: none;
+    border-radius: 0 0 20px 20px;
+    padding: 1.4rem;
+  }
+  .major-section-body > :first-child { margin-top: 0; }
+  .major-section-body > :last-child { margin-bottom: 0; }
+  .major-section-body h3 {
+    font-family: 'Syne', sans-serif;
+    margin-top: 1.2rem;
+    color: var(--text);
+  }
+  .major-section-body p,
+  .major-section-body li {
+    line-height: 1.7;
+    color: #334155;
+  }
+  .major-section-body ul,
+  .major-section-body ol { padding-left: 1.2rem; }
+  .major-section-body table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    display: block;
+    overflow-x: auto;
+  }
+  .major-section-body th,
+  .major-section-body td {
+    min-width: 130px;
+    padding: 0.7rem;
+    border: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .major-section-body th {
+    background: var(--info-bg);
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+  }
+  .major-section-body blockquote {
+    margin: 1rem 0;
+    padding: 0.9rem 1rem;
+    border-left: 4px solid var(--accent);
+    background: var(--info-bg);
+    border-radius: 0 12px 12px 0;
+  }
+
+  .prompt-example {
+    margin: 1rem 0;
+    padding: 1rem 1.2rem;
+    border-radius: 12px;
+    background: #1b2a3a;
+    color: #d4e8f0;
+    font-family: 'DM Sans', monospace;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .prompt-label {
+    display: inline-block;
+    padding: 0.15rem 0.6rem;
+    border-radius: 999px;
+    background: var(--accent);
+    color: #1b2a3a;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.6rem;
+  }
+
+  footer {
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 1.5rem 2rem 2rem;
+    color: #64748b;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    text-align: center;
+  }
+  footer a {
+    color: #4a6a9a;
+    text-decoration: none;
+  }
+  footer a:hover { text-decoration: underline; }
+  .cc-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+  .cc-badge img { height: 22px; }
+
+  /* Mobile menu toggle */
+  .menu-toggle {
+    display: none;
+    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(155,184,216,0.12);
+    color: #fff;
+    padding: 0.45rem 0.8rem;
+    border-radius: 10px;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.18s ease;
+  }
+  .menu-toggle:hover {
+    background: var(--accent);
+    color: #1b2a3a;
+  }
+
+  @media (max-width: 960px) {
+    .layout { grid-template-columns: 1fr; }
+    aside {
+      position: static;
+      height: auto;
+      padding: 0;
+      display: none;
+    }
+    aside.open {
+      display: block;
+      padding: 1rem 0;
+    }
+    .menu-toggle { display: block; }
+    main { padding-top: 1.2rem; }
+  }
+
+  @media (max-width: 640px) {
+    header {
+      height: auto;
+      flex-wrap: wrap;
+      padding: 0.8rem 1rem;
+      gap: 0.6rem;
+    }
+    .brand {
+      gap: 0.6rem;
+      font-size: 0.9rem;
+    }
+    .brand-logo-img { height: 26px; }
+    .header-actions {
+      width: 100%;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    .course-home-link {
+      font-size: 0.72rem;
+      padding: 0.4rem 0.7rem;
+    }
+    .menu-toggle {
+      width: 100%;
+      text-align: center;
+    }
+    main { padding: 0.8rem 0.8rem 3rem; }
+    .hero {
+      padding: 1.3rem 1rem;
+      border-radius: 16px;
+      margin-bottom: 1.2rem;
+    }
+      .hero h1 { font-size: 1.4rem; }
+    .hero-subtitle { font-size: 0.82rem; }
+    .resource-header {
+      align-items: flex-start;
+      padding: 0.9rem;
+      border-radius: 14px;
+      gap: 0.7rem;
+    }
+    .resource-header h2 { font-size: 1.15rem; }
+    .section-icon {
+      width: 34px;
+      height: 34px;
+      font-size: 1rem;
+      border-radius: 10px;
+    }
+    .section-header h3 { font-size: 0.98rem; }
+    .card {
+      padding: 1rem;
+      border-radius: 14px;
+    }
+    .major-section { border-radius: 14px; }
+    .major-section-header {
+      padding: 0.9rem 1rem;
+      gap: 0.7rem;
+    }
+    .major-section-num {
+      width: 34px;
+      height: 34px;
+      flex: 0 0 34px;
+      font-size: 1rem;
+      border-radius: 8px;
+    }
+    .major-section-header h2 { font-size: 1rem; }
+    .major-section-body {
+      padding: 1rem;
+      border-radius: 0 0 14px 14px;
+    }
+    .major-section-body th,
+    .major-section-body td {
+      min-width: 110px;
+      padding: 0.5rem;
+      font-size: 0.85rem;
+    }
+    .card h3 { font-size: 1rem; }
+    .card p, .card li { font-size: 0.92rem; }
+    .card th,
+    .card td {
+      min-width: 110px;
+      padding: 0.5rem;
+      font-size: 0.85rem;
+      line-height: 1.4;
+    }
+    .info-box {
+      padding: 0.85rem 1rem;
+      border-radius: 10px;
+    }
+    .info-box-title { font-size: 0.82rem; }
+    .info-box p, .info-box li { font-size: 0.88rem; }
+    .prompt-example {
+      padding: 0.85rem 0.9rem;
+      font-size: 0.8rem;
+      line-height: 1.55;
+      border-radius: 10px;
+      overflow-x: auto;
+    }
+    .prompt-label { font-size: 0.65rem; }
+    footer { padding: 1.2rem 1rem 1.5rem; font-size: 0.78rem; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    
+    <img class="brand-logo-img" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABPYAAAGtCAYAAACV9frKAAAACXBIWXMAAA7EAAAOxAGVKw4bAAADWWlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSfvu78nIGlkPSdXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQnPz4KPHg6eG1wbWV0YSB4bWxuczp4PSdhZG9iZTpuczptZXRhLyc+CjxyZGY6UkRGIHhtbG5zOnJkZj0naHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyc+CgogPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9JycKICB4bWxuczpBdHRyaWI9J2h0dHA6Ly9ucy5hdHRyaWJ1dGlvbi5jb20vYWRzLzEuMC8nPgogIDxBdHRyaWI6QWRzPgogICA8cmRmOlNlcT4KICAgIDxyZGY6bGkgcmRmOnBhcnNlVHlwZT0nUmVzb3VyY2UnPgogICAgIDxBdHRyaWI6Q3JlYXRlZD4yMDI1LTA3LTIzPC9BdHRyaWI6Q3JlYXRlZD4KICAgICA8QXR0cmliOkV4dElkPjY2OTZkYzgwLTVkODItNDU0My04ODMyLTUwZWFiYjY0ZjA2NzwvQXR0cmliOkV4dElkPgogICAgIDxBdHRyaWI6RmJJZD41MjUyNjU5MTQxNzk1ODA8L0F0dHJpYjpGYklkPgogICAgIDxBdHRyaWI6VG91Y2hUeXBlPjI8L0F0dHJpYjpUb3VjaFR5cGU+CiAgICA8L3JkZjpsaT4KICAgPC9yZGY6U2VxPgogIDwvQXR0cmliOkFkcz4KIDwvcmRmOkRlc2NyaXB0aW9uPgoKIDxyZGY6RGVzY3JpcHRpb24gcmRmOmFib3V0PScnCiAgeG1sbnM6ZGM9J2h0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvJz4KICA8ZGM6dGl0bGU+CiAgIDxyZGY6QWx0PgogICAgPHJkZjpsaSB4bWw6bGFuZz0neC1kZWZhdWx0Jz5MT0dPUyBJQSAtIDE8L3JkZjpsaT4KICAgPC9yZGY6QWx0PgogIDwvZGM6dGl0bGU+CiA8L3JkZjpEZXNjcmlwdGlvbj4KPC9yZGY6UkRGPgo8L3g6eG1wbWV0YT4K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" alt="CEFIRE IA i PC">
+  </div>
+  <div class="header-actions">
+    <a class="course-home-link" href="https://aules.edu.gva.es/formaciodelprofessorat/course/view.php?id=40247" data-label-va="← Tornar al curs" data-label-es="← Volver al curso">← Tornar al curs</a>
+    <button class="menu-toggle" type="button" id="menuToggle">☰ Índex</button>
+  </div>
+</header>
+
+<div class="layout">
+  <aside>
+    <nav id="nav-va" class="nav-group active">
+      <div class="nav-label">Valencià</div>
+      <a class="nav-link nav-link-resource" href="#va-modul-1"><span class="nav-bullet">◆</span><span>Mòdul 1: Introducció a la IA generativa</span></a>
+      <a class="nav-link nav-link-section" href="#va-visio-general"><span class="nav-bullet">•</span><span>Visió general</span></a>
+      <a class="nav-link nav-link-section" href="#va-que-es-ia"><span class="nav-bullet">•</span><span>Què és la intel·ligència artificial</span></a>
+      <a class="nav-link nav-link-section" href="#va-etica"><span class="nav-bullet">•</span><span>Ètica de l'ús de la IA en educació</span></a>
+      <a class="nav-link nav-link-section" href="#va-riscos"><span class="nav-bullet">•</span><span>Riscos habituals</span></a>
+      <a class="nav-link nav-link-section" href="#va-rol-docent"><span class="nav-bullet">•</span><span>El rol del docent amb IA</span></a>
+      <a class="nav-link nav-link-section" href="#va-ia-corporativa"><span class="nav-bullet">🔒</span><span>IA corporativa i protecció de dades</span></a>
+      <a class="nav-link nav-link-section" href="#va-alumnat"><span class="nav-bullet">🎓</span><span>Comptes @alu.gva.es i alumnat</span></a>
+    </nav>
+    <nav id="nav-es" class="nav-group">
+      <div class="nav-label">Castellano</div>
+      <a class="nav-link nav-link-resource" href="#es-modulo-1"><span class="nav-bullet">◆</span><span>Módulo 1: Introducción a la IA generativa</span></a>
+      <a class="nav-link nav-link-section" href="#es-vision-general"><span class="nav-bullet">•</span><span>Visión general</span></a>
+      <a class="nav-link nav-link-section" href="#es-que-es-ia"><span class="nav-bullet">•</span><span>Qué es la inteligencia artificial</span></a>
+      <a class="nav-link nav-link-section" href="#es-etica"><span class="nav-bullet">•</span><span>Ética del uso de la IA en educación</span></a>
+      <a class="nav-link nav-link-section" href="#es-riesgos"><span class="nav-bullet">•</span><span>Riesgos habituales</span></a>
+      <a class="nav-link nav-link-section" href="#es-rol-docente"><span class="nav-bullet">•</span><span>El rol del docente con IA</span></a>
+      <a class="nav-link nav-link-section" href="#es-ia-corporativa"><span class="nav-bullet">🔒</span><span>IA corporativa y protección de datos</span></a>
+      <a class="nav-link nav-link-section" href="#es-alumnado"><span class="nav-bullet">🎓</span><span>Cuentas @alu.gva.es y alumnado</span></a>
+    </nav>
+  </aside>
+
+  <main>
+    <section class="hero">
+      <div id="hero-eyebrow-va" class="hero-eyebrow active">● Fonaments · IA generativa · IA corporativa · protecció de dades</div>
+      <div id="hero-eyebrow-es" class="hero-eyebrow">● Fundamentos · IA generativa · IA corporativa · protección de datos</div>
+      <h1 id="hero-title-va" class="hero-title active">Mòdul 1: Introducció a la IA</h1>
+      <h1 id="hero-title-es" class="hero-title">Módulo 1: Introducción a la IA</h1>
+      <p class="hero-subtitle">Conselleria d'Educació, Universitats i Ocupació · Generalitat Valenciana</p>
+      <div class="lang-switcher">
+        <button class="lang-btn active" type="button" data-lang="va">Valencià</button>
+        <button class="lang-btn" type="button" data-lang="es">Castellano</button>
+      </div>
+    </section>
+
+    <!-- ==================== VALENCIÀ ==================== -->
+    <div id="content-va" class="lang-content active">
+<article id="va-modul-1" class="resource-block">
+<!-- Visió general -->
+<section id="va-visio-general" class="content-section">
+  <div class="section-header">
+    <div class="section-icon">•</div>
+    <h3>Visió general</h3>
+  </div>
+  <div class="card">
+<p>Este mòdul no és tècnic. L'objectiu és que, abans de començar a crear amb IA, tinguem un mapa clar de què és esta tecnologia, què pot fer, què no pot fer i quines responsabilitats implica usar-la en un context educatiu.</p>
+<p>A més dels fonaments de la IA generativa, en este mòdul presentem la <strong>IA corporativa de la Generalitat Valenciana</strong> (Microsoft Copilot integrat en els comptes <code>@edu.gva.es</code>), el marc de protecció de dades que la sustenta i les primeres passes per començar a usar-la de manera segura i responsable.</p>
+<hr />
+  </div>
+</section>
+
+<!-- Què és la intel·ligència artificial -->
+<section id="va-que-es-ia" class="major-section">
+  <div class="major-section-header theme-blue">
+    <div class="major-section-num">01</div>
+    <h2>🤖 Què és la intel·ligència artificial</h2>
+  </div>
+  <div class="major-section-body">
+<h3>Però… què és la intel·ligència artificial?</h3>
+<p>Abans de parlar d'IA generativa, convé entendre què és la <strong>intel·ligència artificial</strong> en termes generals. La IA és una branca de la informàtica que busca crear sistemes capaços de realitzar tasques que, quan les fa un ésser humà, requerixen intel·ligència: comprendre el llenguatge, reconéixer imatges, prendre decisions, resoldre problemes o aprendre de l'experiència.</p>
+<p>La IA no és una tecnologia nova: els seus orígens es remunten als anys 50 del segle passat. El que ha canviat en els últims anys és la seua <strong>capacitat i accessibilitat</strong>. Gràcies a l'augment de la potència de càlcul, la disponibilitat de grans quantitats de dades i els avanços en algorismes d'aprenentatge, la IA ha passat de ser un camp d'investigació acadèmica a una ferramenta present en la vida quotidiana: des dels filtres del correu electrònic fins als assistents de veu, passant per les recomanacions de contingut, els sistemes de navegació o els traductors automàtics.</p>
+<p>En educació, la IA ja estava present de forma invisible en moltes plataformes (correctors ortogràfics, sistemes de recomanació, anàlisi de dades). El que ha canviat amb l'aparició de la <strong>IA generativa</strong> és que ara el docent pot interactuar directament amb estos sistemes per a crear, adaptar i transformar contingut educatiu.</p>
+
+<h3>Què és la IA generativa?</h3>
+<p>La <strong>intel·ligència artificial generativa</strong> és un tipus de sistema informàtic capaç de produir text, imatges, codi o àudio a partir d'instruccions en llenguatge natural. Els models més coneguts (ChatGPT, Gemini, Copilot, Claude) són <strong>models de llenguatge de gran escala</strong> (LLM): han sigut entrenats amb enormes quantitats de text i han aprés a predir quina paraula, frase o fragment de codi segueix a continuació, donat un context.</p>
+<p>Açò té una implicació important: <strong>la IA no "sap" coses en el sentit humà</strong>. Genera respostes estadísticament probables basant-se en patrons del text amb el qual va ser entrenada. De vegades ixes respostes són brillants; altres vegades són plausibles però incorrectes.</p>
+<p>Dins d'este ecosistema convé distingir algunes idees base:</p>
+<ul>
+<li><strong>Aprenentatge automàtic (Machine Learning):</strong> la màquina aprén patrons a partir d'exemples.</li>
+<li><strong>Aprenentatge profund (Deep Learning):</strong> una forma més complexa d'aprenentatge basada en xarxes neuronals.</li>
+<li><strong>IA estreta (ANI):</strong> la IA que usem hui en educació; resol tasques concretes, no "entén tot" com una persona.</li>
+</ul>
+<h3>Chatbots i prompts</h3>
+<p>La majoria de docents usa la IA a través de <strong>chatbots</strong>, que permeten conversar en llenguatge natural amb els models. Exemples habituals són Microsoft Copilot (amb el compte <code>@edu.gva.es</code>), ChatGPT, Gemini o Claude.</p>
+<p>La peça clau és el <strong>prompt</strong> (la instrucció que li dones a la IA). La qualitat de la resposta depén directament de la qualitat del prompt: com més clar, contextualitzat i específic siga, més útil serà el resultat.</p>
+
+<h3>Anatomia d'un bon prompt</h3>
+<p>Un prompt eficaç sol incloure quatre elements:</p>
+<table>
+<thead><tr><th>Element</th><th>Què és</th><th>Exemple</th></tr></thead>
+<tbody>
+<tr><td><strong>Rol</strong></td><td>Indica a la IA <em>qui ha de ser</em>: un perfil professional amb experiència concreta.</td><td>«Eres un mestre especialista en pedagogia inclusiva a primària.»</td></tr>
+<tr><td><strong>Context</strong></td><td>Explica la <em>situació</em>: etapa, matèria, característiques de l'alumnat, objectiu pedagògic.</td><td>«Treballe amb un grup de 4t de primària amb 3 alumnes amb dislèxia.»</td></tr>
+<tr><td><strong>Tasca</strong></td><td>Defineix <em>què vols exactament</em>: generar, resumir, adaptar, avaluar, comparar…</td><td>«Crea una activitat de comprensió lectora adaptada.»</td></tr>
+<tr><td><strong>Format</strong></td><td>Especifica <em>com vols el resultat</em>: longitud, estructura, to, idioma.</td><td>«En valencià, format taula, màxim 200 paraules.»</td></tr>
+</tbody>
+</table>
+
+<h3>Com millorar un prompt</h3>
+<p>Si la primera resposta no és la que esperaves, no canvies de tema: <strong>itera sobre el mateix prompt</strong>. Estes tècniques ajuden a refinar els resultats:</p>
+<ul>
+<li><strong>Afig restriccions:</strong> «No uses vocabulari tècnic», «Limita la resposta a 5 punts», «Escriu-ho com si fora per a alumnat de 8 anys».</li>
+<li><strong>Dona exemples:</strong> mostra un model del que vols. «Segueix este format: [exemple]». Açò es coneix com <em>few-shot prompting</em>.</li>
+<li><strong>Demana que raone pas a pas:</strong> «Explica el teu raonament abans de donar la resposta final». Açò millora la qualitat en tasques complexes (<em>chain-of-thought</em>).</li>
+<li><strong>Reformula el que no funciona:</strong> si la IA dona una resposta massa genèrica, afig detall; si és massa llarga, demana concreció; si el to no és adequat, indica'l explícitament.</li>
+<li><strong>Divideix tasques grans:</strong> en compte de demanar «Crea una unitat didàctica completa», divideix-ho: primer els objectius, després les activitats, després l'avaluació.</li>
+<li><strong>Usa instruccions negatives:</strong> «No inventes dades», «No cites fonts que no existisquen», «No uses un to condescendent».</li>
+</ul>
+
+<div class="info-box">
+<div class="info-box-title">💡 Regla d'or</div>
+<p>Si no li expliques a la IA el que necessites amb la mateixa claredat amb la qual li ho explicaries a un company de claustre que no coneix el teu grup, el resultat serà genèric. <strong>El context pedagògic és el que converteix una resposta correcta en una resposta útil.</strong></p>
+</div>
+<h3>El que la IA fa bé</h3>
+<ul>
+<li>Generar esborranys de text, codi o activitats a partir d'un model.</li>
+<li>Explicar conceptes o errors amb un llenguatge adaptat.</li>
+<li>Transformar, resumir o reformatar contingut existent.</li>
+<li>Accelerar tasques repetitives amb un patró clar.</li>
+</ul>
+<h3>El que la IA no fa bé</h3>
+<ul>
+<li>Verificar l'exactitud de les seues pròpies respostes.</li>
+<li>Citar fonts reals (pot inventar-les).</li>
+<li>Raonar de manera genuïna sobre temes que no ha vist.</li>
+<li>Entendre el context pedagògic de la teua aula si no li ho expliques.</li>
+</ul>
+<hr />
+  </div>
+</section>
+
+<!-- Ètica -->
+<section id="va-etica" class="major-section">
+  <div class="major-section-header theme-teal">
+    <div class="major-section-num">02</div>
+    <h2>⚖️ Ètica de l'ús de la IA en educació</h2>
+  </div>
+  <div class="major-section-body">
+<p>Usar IA en el treball docent no és només una qüestió tècnica. Implica decisions sobre autoria, privadesa, transparència i equitat que convé tindre clares des del principi.</p>
+<h3>Autoria i transparència</h3>
+<p>Quan uses IA per a crear un recurs educatiu, <strong>l'autoria intel·lectual continua sent teua</strong>: tu defineixes l'objectiu, el criteri pedagògic i la idoneïtat del resultat. La IA és una ferramenta, com ho és un processador de text.</p>
+<p>No obstant això, la transparència importa: informa el teu alumnat quan un recurs ha sigut creat amb suport d'IA, especialment si es tracta de contingut avaluable. Si compareixes materials amb altres docents, indica quines parts han sigut generades o assistides per IA.</p>
+<h3>Privadesa i dades de l'alumnat</h3>
+<p>La privadesa és el punt més crític. La regla fonamental: <strong>mai introduïsques dades personals de l'alumnat en cap IA comercial</strong>. Per a les situacions que requerixen treballar amb dades personals, la GVA disposa d'una IA corporativa amb protecció específica. Trobaràs tota la informació detallada a l'<strong>apartat 05: IA corporativa i protecció de dades</strong>.</p>
+<h3>Biaixos en els models</h3>
+<p>Els LLM reproduïxen biaixos presents en les dades amb les quals van ser entrenats: biaixos de gènere, culturals, lingüístics o ideològics. Açò afecta especialment: exemples i situacions que genera per defecte, representació de cultures, èpoques o perspectives minoritàries, i simplificacions del currículum adaptades a estàndards anglosaxons.</p>
+<p>El criteri docent és la primera línia de revisió. Si alguna cosa et sembla esbiaixada o incorrecta, ho és.</p>
+<h3>Citar i referenciar l'ús d'IA</h3>
+<p>Quan uses contingut generat amb IA en materials educatius, convé explicitar-ho i citar la ferramenta per a reforçar la transparència i la integritat acadèmica.</p>
+<p>Exemple de referència: <em>OpenAI. (2024). ChatGPT (versió GPT-4) [Model de llenguatge de gran escala]. https://chat.openai.com</em></p>
+<p>Si es tracta d'imatges generades, afig també el prompt utilitzat i el context d'ús.</p>
+<hr />
+  </div>
+</section>
+
+<!-- Riscos -->
+<section id="va-riscos" class="major-section">
+  <div class="major-section-header theme-copper">
+    <div class="major-section-num">03</div>
+    <h2>⚠️ Riscos habituals a tindre en compte</h2>
+  </div>
+  <div class="major-section-body">
+<h3>Al·lucinacions</h3>
+<p>Els models de llenguatge poden generar informació falsa amb total seguretat aparent: dates incorrectes, cites inventades, lleis que no existixen, referències bibliogràfiques que mai es van publicar.</p>
+<p><strong>Regla pràctica:</strong> qualsevol dada concreta (data, nom, xifra, llei, referència) que vinga de la IA ha de verificar-se en una font primària abans d'usar-la a l'aula.</p>
+<h3>Acumulació d'errors</h3>
+<p>Si parteixes d'una resposta incorrecta i continues construint sobre ella, l'error s'amplifica. Açò és especialment crític en codi: un error estructural en la primera versió pot propagar-se a totes les versions següents.</p>
+<p><strong>Regla pràctica:</strong> treballa per fases curtes i valida cada fase abans de continuar.</p>
+<h3>Dependència i pèrdua d'autonomia</h3>
+<p>Usar IA per a tot pot portar a perdre la capacitat de fer coses sense ella. En el context docent, açò afecta especialment la capacitat d'avaluar críticament el contingut generat.</p>
+<p><strong>Regla pràctica:</strong> entén el que la IA produïx abans d'usar-ho. Si no pots explicar-ho, no ho uses.</p>
+<h3>Homogeneïtzació del contingut</h3>
+<p>Si molts docents usen els mateixos models amb els mateixos prompts, el risc és que el contingut educatiu s'homogeneïtze i perda diversitat pedagògica.</p>
+<p><strong>Regla pràctica:</strong> usa la IA com a punt de partida, no com a destinació. Adapta sempre el resultat al teu context, el teu alumnat i el teu criteri.</p>
+<hr />
+  </div>
+</section>
+
+<!-- Rol del docent -->
+<section id="va-rol-docent" class="major-section">
+  <div class="major-section-header theme-navy">
+    <div class="major-section-num">04</div>
+    <h2>🧰 El rol del docent en un entorn amb IA</h2>
+  </div>
+  <div class="major-section-body">
+<p>La IA no substituïx el docent. El que fa és <strong>ampliar les seues possibilitats</strong>, alliberant temps en tasques repetitives i obrint portes a recursos que abans requerien coneixements tècnics especialitzats o hores de treball. El criteri pedagògic, la responsabilitat sobre el contingut i la relació amb l'alumnat continuen sent competències exclusivament humanes.</p>
+
+<p>Estos són els àmbits on la IA ja està ajudant els docents de manera concreta:</p>
+
+<h3>✍️ Redacció i generació de contingut</h3>
+<p>La IA pot generar esborranys de textos, comunicats a famílies, informes individualitzats, programacions, rúbriques o actes en qüestió de segons. El docent revisa, ajusta el to i valida el contingut, però el punt de partida ja està fet. Açò és especialment útil per a la documentació administrativa que consumeix gran part del temps docent.</p>
+
+<h3>♿ Adaptacions curriculars i atenció a la diversitat</h3>
+<p>Una de les aplicacions més potents: la IA pot adaptar una activitat a diferents nivells de dificultat, simplificar textos per a alumnat amb dificultats de comprensió, generar versions amb suport visual, crear activitats de reforç o ampliació, o proposar adaptacions metodològiques per a necessitats educatives específiques. El que abans requeria hores de treball manual es pot fer en minuts.</p>
+
+<h3>🎨 Creació de recursos motivadors</h3>
+<p>La IA generativa permet crear recursos que abans estaven fora de l'abast de la majoria de docents:</p>
+<ul>
+<li><strong>Imatges personalitzades:</strong> il·lustracions per a contes, flashcards, pòsters temàtics adaptats al contingut que estàs treballant.</li>
+<li><strong>Aplicacions web interactives:</strong> qüestionaris, jocs educatius, simuladors o activitats interactives desplegables en una pàgina web sense necessitat de saber programar.</li>
+<li><strong>Vídeos i presentacions:</strong> guions per a vídeos explicatius, presentacions visuals o storyboards per a projectes audiovisuals.</li>
+<li><strong>Material gamificat:</strong> escape rooms digitals, sistemes de punts, missions i reptes adaptats al currículum.</li>
+</ul>
+
+<h3>🔄 Automatització de tasques repetitives</h3>
+<p>Correcció d'exercicis objectius, generació de llistes, extracció de dades de fulls de càlcul, creació de calendaris, classificació de respostes d'enquestes, generació de resums a partir de textos llargs… La IA pot assumir tasques mecàniques que no requerixen criteri pedagògic però consumeixen hores.</p>
+
+<h3>💡 Inspiració i generació d'idees</h3>
+<p>Quan el docent necessita idees fresques per a una situació d'aprenentatge, un projecte interdisciplinari, una dinàmica de grup o una activitat de tutoria, la IA pot proposar desenes de variants en segons. No substituïx la creativitat docent, però és un excel·lent punt de partida per a evitar el «full en blanc».</p>
+
+<h3>📜 Consulta de normativa i documentació oficial</h3>
+<p>La IA pot ajudar a localitzar, resumir i interpretar normativa educativa (decrets curriculars, resolucions d'inici de curs, instruccions d'avaluació, LOMLOE), sempre que el docent verifique les referències en les fonts oficials. És especialment útil per a navegar documents extensos i trobar la informació rellevant sense llegir-ho tot.</p>
+
+<h3>📊 Anàlisi i visualització de dades</h3>
+<p>A partir de dades d'avaluació, enquestes o resultats acadèmics, la IA pot generar gràfics, detectar patrons, identificar alumnat en risc o crear informes visuals que faciliten la presa de decisions pedagògiques i la comunicació amb famílies i equips directius.</p>
+
+<div class="info-box success">
+<div class="info-box-title">🔑 El que no canvia</div>
+<p>La IA és una ferramenta potent, però el <strong>criteri pedagògic</strong>, la <strong>relació amb l'alumnat</strong>, la <strong>responsabilitat sobre el contingut</strong> i la <strong>decisió final</strong> sobre què és adequat per a cada context segueixen sent exclusivament del docent. La IA proposa; el docent decideix.</p>
+</div>
+<hr />
+  </div>
+</section>
+
+<!-- ==================== NOVES SECCIONS VA ==================== -->
+
+<!-- IA Corporativa @edu.gva.es -->
+<section id="va-ia-corporativa" class="major-section">
+  <div class="major-section-header theme-blue">
+    <div class="major-section-num">05</div>
+    <h2>🔒 IA corporativa, protecció de dades i Microsoft Copilot</h2>
+  </div>
+  <div class="major-section-body">
+<p>La Conselleria d'Educació, Universitats i Ocupació de la Generalitat Valenciana ha posat a disposició del professorat una <strong>IA corporativa</strong> a través de <strong>Microsoft Copilot</strong>, integrada en l'ecosistema Microsoft 365 dels comptes <code>@edu.gva.es</code>.</p>
+
+<p>Açò significa que tot el personal docent i no docent amb compte institucional <code>@edu.gva.es</code> pot accedir a Microsoft Copilot amb un nivell de protecció de dades que <strong>no oferixen les versions gratuïtes o comercials</strong> de cap altra IA generativa del mercat.</p>
+
+<div class="info-box success">
+<div class="info-box-title">✅ Què fa diferent la IA corporativa?</div>
+<p>Quan inicies sessió amb el teu compte <code>@edu.gva.es</code> en Microsoft Copilot, les teues converses estan protegides per un <strong>conveni de protecció de dades entre la Generalitat Valenciana i Microsoft</strong> a nivell europeu. Les dades que introduïsques:</p>
+<ul style="margin:0.5rem 0 0 1.2rem;">
+<li><strong>No s'utilitzen per a entrenar el model</strong> de llenguatge.</li>
+<li><strong>No ixen de la Unió Europea</strong> (els servidors estan dins de l'àmbit de la UE).</li>
+<li><strong>No són accessibles per a Microsoft</strong> per a fins comercials.</li>
+<li>Estan subjectes al <strong>RGPD</strong> (Reglament General de Protecció de Dades) i a la <strong>LOPDGDD</strong> espanyola.</li>
+</ul>
+</div>
+
+<h3>Com accedir</h3>
+<p>Per a accedir a Microsoft Copilot amb la protecció corporativa, simplement:</p>
+<ol>
+<li>Ves a <a href="https://copilot.microsoft.com" target="_blank">copilot.microsoft.com</a> o obri Copilot des de qualsevol aplicació Microsoft 365 (Word, Teams, Outlook…).</li>
+<li>Inicia sessió amb el teu compte <code>nomcognoms@edu.gva.es</code>.</li>
+<li>Verifica que apareix la icona de <strong>protecció corporativa</strong> (escut verd) en la interfície. Açò confirma que les teues dades estan protegides.</li>
+</ol>
+
+<div class="info-box warning">
+<div class="info-box-title">⚠️ Important</div>
+<p>Si uses Copilot <strong>sense iniciar sessió</strong> o amb un compte personal (@hotmail.com, @gmail.com, etc.), <strong>NO tens la protecció corporativa</strong>. En eixe cas, les teues dades podrien usar-se per a entrenar models i no estan cobertes pel conveni de la GVA.</p>
+</div>
+
+<h3>Protecció de dades: qualsevol IA per a recursos, mai amb dades personals</h3>
+<p>Com a docent, pots usar <strong>qualsevol IA generativa del mercat</strong> (ChatGPT, Claude, Gemini, Copilot, Canva AI o qualsevol altra) per a crear recursos educatius, generar idees, redactar esborranys, preparar activitats o dissenyar materials. <strong>No hi ha cap restricció sobre quina ferramenta uses</strong>, sempre que complisques una condició fonamental:</p>
+
+<div class="info-box warning">
+<div class="info-box-title">⚠️ La regla d'or de la protecció de dades</div>
+<p><strong>No introduïsques mai dades de caràcter personal en cap IA comercial</strong> (noms d'alumnat, notes, informació de famílies, dades del centre que identifiquen persones concretes). Ni en ChatGPT, ni en Claude, ni en Gemini, ni en cap altra versió gratuïta o de pagament.</p>
+<p>La responsabilitat sobre el que s'introdueix en una IA és sempre del docent.</p>
+</div>
+
+<p>Açò significa que pots, per exemple:</p>
+<ul>
+<li>Demanar a qualsevol IA que et genere una activitat de matemàtiques per a 3r de primària. ✅</li>
+<li>Usar Claude per a redactar un comunicat genèric a famílies sobre una excursió. ✅</li>
+<li>Demanar a ChatGPT que t'explique un article 9 del RGPD en termes senzills. ✅</li>
+<li>Crear una rúbrica d'avaluació amb Gemini sense noms ni dades concretes. ✅</li>
+</ul>
+<p>El que <strong>no pots fer</strong> és escriure en cap d'estes ferramentes: «Genera un informe per a l'alumne Pau García del grup 4tB amb les seues notes de matemàtiques». Eixa frase conté dades personals i no ha d'introduir-se mai en una IA comercial.</p>
+
+<div class="info-box warning">
+<div class="info-box-title">🔐 Principi de minimització de dades</div>
+<p>Fins i tot quan utilitzes la IA corporativa Copilot amb el teu compte <code>@edu.gva.es</code>, aplica sempre el <strong>principi de minimització</strong>: introduïx <strong>el mínim de dades personals possible</strong> per a aconseguir el resultat que necessites. Sempre que pugues:</p>
+<ul style="margin:0.4rem 0 0 1.2rem;">
+<li><strong>Anonimitza:</strong> usa «Alumne 1», «Alumne 2» o inicials en compte de noms complets, sempre que el resultat siga igualment útil.</li>
+<li><strong>Generalitza:</strong> si no necessites identificar individualment, treballa amb dades agregades (mitjanes del grup, percentatges).</li>
+<li><strong>Pregunta't:</strong> «Necesssite realment este nom/nota per a obtindre el que vull de la IA, o puc aconseguir el mateix sense ell?»</li>
+</ul>
+</div>
+
+<h3>Quan necessites usar dades personals</h3>
+<p>La realitat docent implica que, en moltes tasques, cal treballar amb dades de l'alumnat: informes individualitzats, adaptacions amb nom i cognom, anàlisi de notes o comunicats personalitzats. Per a estes situacions, pots usar el <strong>Copilot corporatiu</strong> amb el teu compte <code>@edu.gva.es</code> (explicat adalt).</p>
+
+<p>Amb Copilot corporatiu, pots introduir <strong>dades personals bàsiques</strong> necessàries per al teu treball docent:</p>
+<ul>
+<li><strong>Noms i cognoms</strong> de l'alumnat (per a generar informes, adaptacions, comunicats…).</li>
+<li><strong>Notes</strong> i qualificacions.</li>
+<li><strong>Observacions acadèmiques</strong> generals.</li>
+<li><strong>Dades de contacte</strong> de famílies per a gestió administrativa.</li>
+<li><strong>Informació organitzativa</strong> del centre (horaris, grups, assignació de tutories…).</li>
+</ul>
+
+<h3>Què NO pots introduir mai, ni tan sols en Copilot</h3>
+<p>Existixen categories de dades que, per la seua naturalesa sensible, <strong>no s'han d'introduir en cap sistema d'IA</strong>, ni tan sols en la versió corporativa. Són les anomenades <strong>dades de categoria especial</strong> (article 9 del RGPD):</p>
+<ul>
+<li><strong>Dades de salut:</strong> diagnòstics mèdics, informes psicològics, trastorns, medicació, al·lèrgies (exemple: «L'alumne Pau té TDAH i pren metilfenidat»).</li>
+<li><strong>Orientació sexual o identitat de gènere:</strong> qualsevol informació sobre la identitat o orientació d'alumnat o famílies.</li>
+<li><strong>Origen ètnic o racial:</strong> dades sobre ètnia, país d'origen en context discriminatori, pertinença a minories.</li>
+<li><strong>Conviccions religioses o ideològiques:</strong> creences, pràctiques religioses, filiació política de famílies.</li>
+<li><strong>Dades biomètriques:</strong> empremtes, reconeixement facial.</li>
+<li><strong>Condicions sociofamiliars sensibles:</strong> situacions de custòdia, ordres d'allunyament, violència intrafamiliar, situacions de desemparament.</li>
+</ul>
+
+<div class="info-box success">
+<div class="info-box-title">📋 Resum pràctic en tres nivells</div>
+<p><strong>Sense dades personals</strong> → Qualsevol IA (ChatGPT, Claude, Gemini, Copilot…). Usa la que preferisques.</p>
+<p><strong>Amb dades personals bàsiques</strong> (nom, nota, grup) → <strong>Només Copilot @edu.gva.es</strong>.</p>
+<p><strong>Dades de categoria especial</strong> (salut, ètnia, religió, orientació sexual…) → <strong>Mai en cap IA</strong>, ni corporativa ni comercial.</p>
+</div>
+
+<h3>Per què es pot confiar en Copilot @edu.gva.es?</h3>
+<p>La confiança en el sistema corporatiu es basa en tres pilars:</p>
+<ol>
+<li><strong>Conveni contractual amb Microsoft:</strong> la Generalitat Valenciana té un acord de processament de dades (DPA) que obliga Microsoft a tractar les dades dels comptes @edu.gva.es d'acord amb el RGPD europeu.</li>
+<li><strong>No-entrenament del model:</strong> Microsoft ha garantit per contracte que les dades introduïdes en Copilot amb comptes corporatius <strong>no s'utilitzen per a entrenar ni millorar els models de llenguatge</strong>. Les converses es processen i es descarten.</li>
+<li><strong>Residència de dades a la UE:</strong> els servidors que processen les peticions estan ubicats dins de la Unió Europea, complint amb els requisits de transferència internacional de dades del RGPD.</li>
+</ol>
+<hr />
+  </div>
+</section>
+
+<!-- Comptes @alu.gva.es -->
+<section id="va-alumnat" class="major-section">
+  <div class="major-section-header theme-purple">
+    <div class="major-section-num">06</div>
+    <h2>🎓 Comptes @alu.gva.es i ús de la IA per part de l'alumnat</h2>
+  </div>
+  <div class="major-section-body">
+<p>L'alumnat de la Comunitat Valenciana disposa de comptes <code>@alu.gva.es</code> dins de l'ecosistema Microsoft 365 educatiu. No obstant això, la situació respecte a l'accés a la IA és diferent de la del professorat.</p>
+
+<h3>Estat actual de Copilot en comptes @alu.gva.es</h3>
+<div class="info-box">
+<div class="info-box-title">ℹ️ Situació a juliol de 2026</div>
+<p>A juliol de 2026, els comptes <code>@alu.gva.es</code> <strong>no tenen habilitat Microsoft Copilot</strong> com a assistent d'IA conversacional. L'alumnat no pot accedir a la funcionalitat de xat de Copilot amb el seu compte escolar.</p>
+<p>No obstant això, <strong>s'està treballant activament per a habilitar Copilot per a l'alumnat major de 13 anys</strong>, amb les garanties de protecció de dades adequades i amb el consentiment corresponent.</p>
+</div>
+
+<h3>Què pot fer l'alumnat ara?</h3>
+<p>Tot i que Copilot no està habilitat com a xat d'IA, l'alumnat pot trobar funcionalitats d'IA integrades en algunes aplicacions de Microsoft 365 (com la cerca intel·ligent en Bing o les suggeriments d'escriptura en Word). Estes funcionalitats actuen més com un <strong>buscador millorat</strong> que com un assistent generatiu complet.</p>
+
+<div class="info-box warning">
+<div class="info-box-title">⚠️ Mirada crítica del docent</div>
+<p>Quan l'alumnat utilitza qualsevol ferramenta amb components d'IA (siga dins de Microsoft 365 o fora), és fonamental que el docent:</p>
+<ul style="margin:0.5rem 0 0 1.2rem;">
+<li><strong>Supervise l'ús</strong> i guie l'alumnat en la interpretació dels resultats.</li>
+<li>Fomente la <strong>mirada crítica</strong>: la IA pot donar respostes incorrectes, esbiaixades o descontextualitzades.</li>
+<li>Ensenye a <strong>verificar la veracitat</strong> de les dades obtingudes contrastant amb fonts fiables.</li>
+<li>Establisca <strong>normes clares d'ús</strong> a l'aula: quan és adequat usar IA, quan no, i què constituïx un ús acadèmicament honest.</li>
+<li>Recorde que <strong>la IA mai substituïx el procés d'aprenentatge</strong>: copiar una resposta de la IA no és aprendre.</li>
+</ul>
+</div>
+
+<h3>Recomanacions per a l'aula</h3>
+<p>Mentre s'habilita Copilot per a l'alumnat, recomanem als docents:</p>
+<ul>
+<li>Usar la IA com a <strong>ferramenta de demostració</strong> a l'aula (el docent projecta i l'alumnat observa i analitza).</li>
+<li>Dissenyar activitats on l'alumnat <strong>avalua críticament respostes de la IA</strong> (comparant amb fonts primàries).</li>
+<li>Treballar l'<strong>alfabet digital</strong>: que l'alumnat entenga què és un LLM, per què pot fallar i quins biaixos pot tindre.</li>
+<li>Preparar l'alumnat per a un futur pròxim en què tindran accés directe a estes ferramentes.</li>
+</ul>
+<hr />
+  </div>
+</section>
+
+
+
+</article>
+    </div>
+
+    <!-- ==================== CASTELLANO ==================== -->
+    <div id="content-es" class="lang-content">
+<article id="es-modulo-1" class="resource-block">
+<!-- Visión general -->
+<section id="es-vision-general" class="content-section">
+  <div class="section-header">
+    <div class="section-icon">•</div>
+    <h3>Visión general</h3>
+  </div>
+  <div class="card">
+<p>Este módulo no es técnico. El objetivo es que, antes de empezar a crear con IA, tengamos un mapa claro de qué es esta tecnología, qué puede hacer, qué no puede hacer y qué responsabilidades implica usarla en un contexto educativo.</p>
+<p>Además de los fundamentos de la IA generativa, en este módulo presentamos la <strong>IA corporativa de la Generalitat Valenciana</strong> (Microsoft Copilot integrado en las cuentas <code>@edu.gva.es</code>), el marco de protección de datos que la sustenta y los primeros pasos para empezar a usarla de manera segura y responsable.</p>
+<hr />
+  </div>
+</section>
+
+<!-- Qué es la inteligencia artificial -->
+<section id="es-que-es-ia" class="major-section">
+  <div class="major-section-header theme-blue">
+    <div class="major-section-num">01</div>
+    <h2>🤖 Qué es la inteligencia artificial</h2>
+  </div>
+  <div class="major-section-body">
+<h3>Pero… ¿qué es la inteligencia artificial?</h3>
+<p>Antes de hablar de IA generativa, conviene entender qué es la <strong>inteligencia artificial</strong> en términos generales. La IA es una rama de la informática que busca crear sistemas capaces de realizar tareas que, cuando las realiza un ser humano, requieren inteligencia: comprender el lenguaje, reconocer imágenes, tomar decisiones, resolver problemas o aprender de la experiencia.</p>
+<p>La IA no es una tecnología nueva: sus orígenes se remontan a los años 50 del siglo pasado. Lo que ha cambiado en los últimos años es su <strong>capacidad y accesibilidad</strong>. Gracias al aumento de la potencia de cálculo, la disponibilidad de grandes cantidades de datos y los avances en algoritmos de aprendizaje, la IA ha pasado de ser un campo de investigación académica a una herramienta presente en la vida cotidiana: desde los filtros del correo electrónico hasta los asistentes de voz, pasando por las recomendaciones de contenido, los sistemas de navegación o los traductores automáticos.</p>
+<p>En educación, la IA ya estaba presente de forma invisible en muchas plataformas (correctores ortográficos, sistemas de recomendación, análisis de datos). Lo que ha cambiado con la aparición de la <strong>IA generativa</strong> es que ahora el docente puede interactuar directamente con estos sistemas para crear, adaptar y transformar contenido educativo.</p>
+
+<h3>¿Qué es la IA generativa?</h3>
+<p>La <strong>inteligencia artificial generativa</strong> es un tipo de sistema informático capaz de producir texto, imágenes, código o audio a partir de instrucciones en lenguaje natural. Los modelos más conocidos (ChatGPT, Gemini, Copilot, Claude) son <strong>modelos de lenguaje de gran escala</strong> (LLM): han sido entrenados con enormes cantidades de texto y han aprendido a predecir qué palabra, frase o fragmento de código sigue a continuación, dado un contexto.</p>
+<p>Esto tiene una implicación importante: <strong>la IA no "sabe" cosas en el sentido humano</strong>. Genera respuestas estadísticamente probables basándose en patrones del texto con el que fue entrenada. A veces esas respuestas son brillantes; otras veces son plausibles pero incorrectas.</p>
+<p>Dentro de este ecosistema conviene distinguir algunas ideas base:</p>
+<ul>
+<li><strong>Aprendizaje automático (Machine Learning):</strong> la máquina aprende patrones a partir de ejemplos.</li>
+<li><strong>Aprendizaje profundo (Deep Learning):</strong> una forma más compleja de aprendizaje basada en redes neuronales.</li>
+<li><strong>IA estrecha (ANI):</strong> la IA que usamos hoy en educación; resuelve tareas concretas, no "entiende todo" como una persona.</li>
+</ul>
+<h3>Chatbots y prompts</h3>
+<p>La mayoría de docentes usa la IA a través de <strong>chatbots</strong>, que permiten conversar en lenguaje natural con los modelos. Ejemplos habituales son Microsoft Copilot (con la cuenta <code>@edu.gva.es</code>), ChatGPT, Gemini o Claude.</p>
+<p>La pieza clave es el <strong>prompt</strong> (la instrucción que le das a la IA). La calidad de la respuesta depende directamente de la calidad del prompt: cuanto más claro, contextualizado y específico sea, más útil será el resultado.</p>
+
+<h3>Anatomía de un buen prompt</h3>
+<p>Un prompt eficaz suele incluir cuatro elementos:</p>
+<table>
+<thead><tr><th>Elemento</th><th>Qué es</th><th>Ejemplo</th></tr></thead>
+<tbody>
+<tr><td><strong>Rol</strong></td><td>Indica a la IA <em>quién debe ser</em>: un perfil profesional con experiencia concreta.</td><td>«Eres un maestro especialista en pedagogía inclusiva en primaria.»</td></tr>
+<tr><td><strong>Contexto</strong></td><td>Explica la <em>situación</em>: etapa, materia, características del alumnado, objetivo pedagógico.</td><td>«Trabajo con un grupo de 4.º de primaria con 3 alumnos con dislexia.»</td></tr>
+<tr><td><strong>Tarea</strong></td><td>Define <em>qué quieres exactamente</em>: generar, resumir, adaptar, evaluar, comparar…</td><td>«Crea una actividad de comprensión lectora adaptada.»</td></tr>
+<tr><td><strong>Formato</strong></td><td>Especifica <em>cómo quieres el resultado</em>: longitud, estructura, tono, idioma.</td><td>«En valenciano, formato tabla, máximo 200 palabras.»</td></tr>
+</tbody>
+</table>
+
+<h3>Cómo mejorar un prompt</h3>
+<p>Si la primera respuesta no es la que esperabas, no cambies de tema: <strong>itera sobre el mismo prompt</strong>. Estas técnicas ayudan a refinar los resultados:</p>
+<ul>
+<li><strong>Añade restricciones:</strong> «No uses vocabulario técnico», «Limita la respuesta a 5 puntos», «Escríbelo como si fuera para alumnado de 8 años».</li>
+<li><strong>Da ejemplos:</strong> muestra un modelo de lo que quieres. «Sigue este formato: [ejemplo]». Esto se conoce como <em>few-shot prompting</em>.</li>
+<li><strong>Pide que razone paso a paso:</strong> «Explica tu razonamiento antes de dar la respuesta final». Esto mejora la calidad en tareas complejas (<em>chain-of-thought</em>).</li>
+<li><strong>Reformula lo que no funciona:</strong> si la IA da una respuesta demasiado genérica, añade detalle; si es demasiado larga, pide concreción; si el tono no es adecuado, indícalo explícitamente.</li>
+<li><strong>Divide tareas grandes:</strong> en lugar de pedir «Crea una unidad didáctica completa», divídelo: primero los objetivos, después las actividades, después la evaluación.</li>
+<li><strong>Usa instrucciones negativas:</strong> «No inventes datos», «No cites fuentes que no existan», «No uses un tono condescendiente».</li>
+</ul>
+
+<div class="info-box">
+<div class="info-box-title">💡 Regla de oro</div>
+<p>Si no le explicas a la IA lo que necesitas con la misma claridad con la que se lo explicarías a un compañero de claustro que no conoce tu grupo, el resultado será genérico. <strong>El contexto pedagógico es lo que convierte una respuesta correcta en una respuesta útil.</strong></p>
+</div>
+<h3>Lo que la IA hace bien</h3>
+<ul>
+<li>Generar borradores de texto, código o actividades a partir de un modelo.</li>
+<li>Explicar conceptos o errores con un lenguaje adaptado.</li>
+<li>Transformar, resumir o reformatear contenido existente.</li>
+<li>Acelerar tareas repetitivas con un patrón claro.</li>
+</ul>
+<h3>Lo que la IA no hace bien</h3>
+<ul>
+<li>Verificar la exactitud de sus propias respuestas.</li>
+<li>Citar fuentes reales (puede inventarlas).</li>
+<li>Razonar de forma genuina sobre temas que no ha visto.</li>
+<li>Entender el contexto pedagógico de tu aula si no se lo explicas.</li>
+</ul>
+<hr />
+  </div>
+</section>
+
+<!-- Ética -->
+<section id="es-etica" class="major-section">
+  <div class="major-section-header theme-teal">
+    <div class="major-section-num">02</div>
+    <h2>⚖️ Ética del uso de la IA en educación</h2>
+  </div>
+  <div class="major-section-body">
+<p>Usar IA en el trabajo docente no es solo una cuestión técnica. Implica decisiones sobre autoría, privacidad, transparencia y equidad que conviene tener claras desde el principio.</p>
+<h3>Autoría y transparencia</h3>
+<p>Cuando usas IA para crear un recurso educativo, <strong>la autoría intelectual sigue siendo tuya</strong>: tú defines el objetivo, el criterio pedagógico y la idoneidad del resultado. La IA es una herramienta, como lo es un procesador de texto.</p>
+<p>Sin embargo, la transparencia importa: informa a tu alumnado cuando un recurso ha sido creado con apoyo de IA, especialmente si se trata de contenido evaluable. Si compartes materiales con otros docentes, indica qué partes han sido generadas o asistidas por IA.</p>
+<h3>Privacidad y datos del alumnado</h3>
+<p>La privacidad es el punto más crítico. La regla fundamental: <strong>nunca introduzcas datos personales del alumnado en ninguna IA comercial</strong>. Para las situaciones que requieren trabajar con datos personales, la GVA dispone de una IA corporativa con protección específica. Encontrarás toda la información detallada en el <strong>apartado 05: IA corporativa y protección de datos</strong>.</p>
+<h3>Sesgos en los modelos</h3>
+<p>Los LLM reproducen sesgos presentes en los datos con los que fueron entrenados: sesgos de género, culturales, lingüísticos o ideológicos. Esto afecta especialmente a: ejemplos y situaciones que genera por defecto, representación de culturas, épocas o perspectivas minoritarias, y simplificaciones del currículo adaptadas a estándares anglosajones.</p>
+<p>El criterio docente es la primera línea de revisión. Si algo te parece sesgado o incorrecto, lo es.</p>
+<h3>Citar y referenciar el uso de IA</h3>
+<p>Cuando uses contenido generado con IA en materiales educativos, conviene explicitarlo y citar la herramienta para reforzar la transparencia y la integridad académica.</p>
+<p>Ejemplo de referencia: <em>OpenAI. (2024). ChatGPT (versión GPT-4) [Modelo de lenguaje grande]. https://chat.openai.com</em></p>
+<p>Si se trata de imágenes generadas, añade también el prompt utilizado y el contexto de uso.</p>
+<hr />
+  </div>
+</section>
+
+<!-- Riesgos -->
+<section id="es-riesgos" class="major-section">
+  <div class="major-section-header theme-copper">
+    <div class="major-section-num">03</div>
+    <h2>⚠️ Riesgos habituales a tener en cuenta</h2>
+  </div>
+  <div class="major-section-body">
+<h3>Alucinaciones</h3>
+<p>Los modelos de lenguaje pueden generar información falsa con total seguridad aparente: fechas incorrectas, citas inventadas, leyes que no existen, referencias bibliográficas que nunca se publicaron.</p>
+<p><strong>Regla práctica:</strong> cualquier dato concreto (fecha, nombre, cifra, ley, referencia) que venga de la IA debe verificarse en una fuente primaria antes de usarlo en el aula.</p>
+<h3>Acumulación de errores</h3>
+<p>Si partes de una respuesta incorrecta y sigues construyendo sobre ella, el error se amplifica. Esto es especialmente crítico en código: un fallo estructural en la primera versión puede propagarse a todas las versiones siguientes.</p>
+<p><strong>Regla práctica:</strong> trabaja por fases cortas y valida cada fase antes de continuar.</p>
+<h3>Dependencia y pérdida de autonomía</h3>
+<p>Usar IA para todo puede llevar a perder la capacidad de hacer cosas sin ella. En el contexto docente, esto afecta especialmente a la capacidad de evaluar críticamente el contenido generado.</p>
+<p><strong>Regla práctica:</strong> entiende lo que la IA produce antes de usarlo. Si no puedes explicarlo, no lo uses.</p>
+<h3>Homogeneización del contenido</h3>
+<p>Si muchos docentes usan los mismos modelos con los mismos prompts, el riesgo es que el contenido educativo se homogenice y pierda diversidad pedagógica.</p>
+<p><strong>Regla práctica:</strong> usa la IA como punto de partida, no como destino. Adapta siempre el resultado a tu contexto, tu alumnado y tu criterio.</p>
+<hr />
+  </div>
+</section>
+
+<!-- Rol del docente -->
+<section id="es-rol-docente" class="major-section">
+  <div class="major-section-header theme-navy">
+    <div class="major-section-num">04</div>
+    <h2>🧰 El rol del docente en un entorno con IA</h2>
+  </div>
+  <div class="major-section-body">
+<p>La IA no sustituye al docente. Lo que hace es <strong>ampliar sus posibilidades</strong>, liberando tiempo en tareas repetitivas y abriendo puertas a recursos que antes requerían conocimientos técnicos especializados u horas de trabajo. El criterio pedagógico, la responsabilidad sobre el contenido y la relación con el alumnado siguen siendo competencias exclusivamente humanas.</p>
+
+<p>Estos son los ámbitos donde la IA ya está ayudando a los docentes de forma concreta:</p>
+
+<h3>✍️ Redacción y generación de contenido</h3>
+<p>La IA puede generar borradores de textos, comunicados a familias, informes individualizados, programaciones, rúbricas o actas en cuestión de segundos. El docente revisa, ajusta el tono y valida el contenido, pero el punto de partida ya está hecho. Esto es especialmente útil para la documentación administrativa que consume gran parte del tiempo docente.</p>
+
+<h3>♿ Adaptaciones curriculares y atención a la diversidad</h3>
+<p>Una de las aplicaciones más potentes: la IA puede adaptar una actividad a diferentes niveles de dificultad, simplificar textos para alumnado con dificultades de comprensión, generar versiones con apoyo visual, crear actividades de refuerzo o ampliación, o proponer adaptaciones metodológicas para necesidades educativas específicas. Lo que antes requería horas de trabajo manual se puede hacer en minutos.</p>
+
+<h3>🎨 Creación de recursos motivadores</h3>
+<p>La IA generativa permite crear recursos que antes estaban fuera del alcance de la mayoría de docentes:</p>
+<ul>
+<li><strong>Imágenes personalizadas:</strong> ilustraciones para cuentos, flashcards, pósters temáticos adaptados al contenido que estás trabajando.</li>
+<li><strong>Aplicaciones web interactivas:</strong> cuestionarios, juegos educativos, simuladores o actividades interactivas desplegables en una página web sin necesidad de saber programar.</li>
+<li><strong>Vídeos y presentaciones:</strong> guiones para vídeos explicativos, presentaciones visuales o storyboards para proyectos audiovisuales.</li>
+<li><strong>Material gamificado:</strong> escape rooms digitales, sistemas de puntos, misiones y retos adaptados al currículo.</li>
+</ul>
+
+<h3>🔄 Automatización de tareas repetitivas</h3>
+<p>Corrección de ejercicios objetivos, generación de listas, extracción de datos de hojas de cálculo, creación de calendarios, clasificación de respuestas de encuestas, generación de resúmenes a partir de textos largos… La IA puede asumir tareas mecánicas que no requieren criterio pedagógico pero consumen horas.</p>
+
+<h3>💡 Inspiración y generación de ideas</h3>
+<p>Cuando el docente necesita ideas frescas para una situación de aprendizaje, un proyecto interdisciplinar, una dinámica de grupo o una actividad de tutoría, la IA puede proponer decenas de variantes en segundos. No sustituye la creatividad docente, pero es un excelente punto de partida para evitar el «folio en blanco».</p>
+
+<h3>📜 Consulta de normativa y documentación oficial</h3>
+<p>La IA puede ayudar a localizar, resumir e interpretar normativa educativa (decretos curriculares, resoluciones de inicio de curso, instrucciones de evaluación, LOMLOE), siempre que el docente verifique las referencias en las fuentes oficiales. Es especialmente útil para navegar documentos extensos y encontrar la información relevante sin leerlo todo.</p>
+
+<h3>📊 Análisis y visualización de datos</h3>
+<p>A partir de datos de evaluación, encuestas o resultados académicos, la IA puede generar gráficos, detectar patrones, identificar alumnado en riesgo o crear informes visuales que faciliten la toma de decisiones pedagógicas y la comunicación con familias y equipos directivos.</p>
+
+<div class="info-box success">
+<div class="info-box-title">🔑 Lo que no cambia</div>
+<p>La IA es una herramienta potente, pero el <strong>criterio pedagógico</strong>, la <strong>relación con el alumnado</strong>, la <strong>responsabilidad sobre el contenido</strong> y la <strong>decisión final</strong> sobre qué es adecuado para cada contexto siguen siendo exclusivamente del docente. La IA propone; el docente decide.</p>
+</div>
+<hr />
+  </div>
+</section>
+
+<!-- ==================== NUEVAS SECCIONES ES ==================== -->
+
+<!-- IA Corporativa @edu.gva.es -->
+<section id="es-ia-corporativa" class="major-section">
+  <div class="major-section-header theme-blue">
+    <div class="major-section-num">05</div>
+    <h2>🔒 IA corporativa, protección de datos y Microsoft Copilot</h2>
+  </div>
+  <div class="major-section-body">
+<p>La Conselleria d'Educació, Universitats i Ocupació de la Generalitat Valenciana ha puesto a disposición del profesorado una <strong>IA corporativa</strong> a través de <strong>Microsoft Copilot</strong>, integrada en el ecosistema Microsoft 365 de las cuentas <code>@edu.gva.es</code>.</p>
+
+<p>Esto significa que todo el personal docente y no docente con cuenta institucional <code>@edu.gva.es</code> puede acceder a Microsoft Copilot con un nivel de protección de datos que <strong>no ofrecen las versiones gratuitas o comerciales</strong> de ninguna otra IA generativa del mercado.</p>
+
+<div class="info-box success">
+<div class="info-box-title">✅ ¿Qué hace diferente a la IA corporativa?</div>
+<p>Cuando inicias sesión con tu cuenta <code>@edu.gva.es</code> en Microsoft Copilot, tus conversaciones están protegidas por un <strong>convenio de protección de datos entre la Generalitat Valenciana y Microsoft</strong> a nivel europeo. Los datos que introduzcas:</p>
+<ul style="margin:0.5rem 0 0 1.2rem;">
+<li><strong>No se utilizan para entrenar el modelo</strong> de lenguaje.</li>
+<li><strong>No salen de la Unión Europea</strong> (los servidores están dentro del ámbito de la UE).</li>
+<li><strong>No son accesibles para Microsoft</strong> con fines comerciales.</li>
+<li>Están sujetos al <strong>RGPD</strong> (Reglamento General de Protección de Datos) y a la <strong>LOPDGDD</strong> española.</li>
+</ul>
+</div>
+
+<h3>Cómo acceder</h3>
+<p>Para acceder a Microsoft Copilot con la protección corporativa, simplemente:</p>
+<ol>
+<li>Ve a <a href="https://copilot.microsoft.com" target="_blank">copilot.microsoft.com</a> o abre Copilot desde cualquier aplicación Microsoft 365 (Word, Teams, Outlook…).</li>
+<li>Inicia sesión con tu cuenta <code>nombreapellidos@edu.gva.es</code>.</li>
+<li>Verifica que aparece el icono de <strong>protección corporativa</strong> (escudo verde) en la interfaz. Esto confirma que tus datos están protegidos.</li>
+</ol>
+
+<div class="info-box warning">
+<div class="info-box-title">⚠️ Importante</div>
+<p>Si usas Copilot <strong>sin iniciar sesión</strong> o con una cuenta personal (@hotmail.com, @gmail.com, etc.), <strong>NO tienes la protección corporativa</strong>. En ese caso, tus datos podrían usarse para entrenar modelos y no están cubiertos por el convenio de la GVA.</p>
+</div>
+
+<h3>Protección de datos: cualquier IA para recursos, nunca con datos personales</h3>
+<p>Como docente, puedes usar <strong>cualquier IA generativa del mercado</strong> (ChatGPT, Claude, Gemini, Copilot, Canva AI o cualquier otra) para crear recursos educativos, generar ideas, redactar borradores, preparar actividades o diseñar materiales. <strong>No hay ninguna restricción sobre qué herramienta uses</strong>, siempre que cumplas una condición fundamental:</p>
+
+<div class="info-box warning">
+<div class="info-box-title">⚠️ La regla de oro de la protección de datos</div>
+<p><strong>No introduzcas nunca datos de carácter personal en ninguna IA comercial</strong> (nombres de alumnado, notas, información de familias, datos del centro que identifiquen a personas concretas). Ni en ChatGPT, ni en Claude, ni en Gemini, ni en ninguna otra versión gratuita o de pago.</p>
+<p>La responsabilidad sobre lo que se introduce en una IA es siempre del docente.</p>
+</div>
+
+<p>Esto significa que puedes, por ejemplo:</p>
+<ul>
+<li>Pedir a cualquier IA que te genere una actividad de matemáticas para 3.º de primaria. ✅</li>
+<li>Usar Claude para redactar un comunicado genérico a familias sobre una excursión. ✅</li>
+<li>Pedir a ChatGPT que te explique el artículo 9 del RGPD en términos sencillos. ✅</li>
+<li>Crear una rúbrica de evaluación con Gemini sin nombres ni datos concretos. ✅</li>
+</ul>
+<p>Lo que <strong>no puedes hacer</strong> es escribir en ninguna de estas herramientas: «Genera un informe para el alumno Pau García del grupo 4.ºB con sus notas de matemáticas». Esa frase contiene datos personales y no debe introducirse nunca en una IA comercial.</p>
+
+<div class="info-box warning">
+<div class="info-box-title">🔐 Principio de minimización de datos</div>
+<p>Incluso cuando utilices la IA corporativa Copilot con tu cuenta <code>@edu.gva.es</code>, aplica siempre el <strong>principio de minimización</strong>: introduce <strong>el mínimo de datos personales posible</strong> para conseguir el resultado que necesitas. Siempre que puedas:</p>
+<ul style="margin:0.4rem 0 0 1.2rem;">
+<li><strong>Anonimiza:</strong> usa «Alumno 1», «Alumno 2» o iniciales en lugar de nombres completos, siempre que el resultado sea igualmente útil.</li>
+<li><strong>Generaliza:</strong> si no necesitas identificar individualmente, trabaja con datos agregados (medias del grupo, porcentajes).</li>
+<li><strong>Pregúntate:</strong> «¿Necesito realmente este nombre/nota para obtener lo que quiero de la IA, o puedo conseguir lo mismo sin él?»</li>
+</ul>
+</div>
+
+<h3>Cuando necesitas usar datos personales</h3>
+<p>La realidad docente implica que, en muchas tareas, hay que trabajar con datos del alumnado: informes individualizados, adaptaciones con nombre y apellido, análisis de notas o comunicados personalizados. Para estas situaciones, puedes usar el <strong>Copilot corporativo</strong> con tu cuenta <code>@edu.gva.es</code> (explicado arriba).</p>
+
+<p>Con Copilot corporativo, puedes introducir <strong>datos personales básicos</strong> necesarios para tu trabajo docente:</p>
+<ul>
+<li><strong>Nombres y apellidos</strong> del alumnado (para generar informes, adaptaciones, comunicados…).</li>
+<li><strong>Notas</strong> y calificaciones.</li>
+<li><strong>Observaciones académicas</strong> generales.</li>
+<li><strong>Datos de contacto</strong> de familias para gestión administrativa.</li>
+<li><strong>Información organizativa</strong> del centro (horarios, grupos, asignación de tutorías…).</li>
+</ul>
+
+<h3>Qué NO puedes introducir nunca, ni siquiera en Copilot</h3>
+<p>Existen categorías de datos que, por su naturaleza sensible, <strong>no deben introducirse en ningún sistema de IA</strong>, ni siquiera en la versión corporativa. Son los llamados <strong>datos de categoría especial</strong> (artículo 9 del RGPD):</p>
+<ul>
+<li><strong>Datos de salud:</strong> diagnósticos médicos, informes psicológicos, trastornos, medicación, alergias (ejemplo: «El alumno Pau tiene TDAH y toma metilfenidato»).</li>
+<li><strong>Orientación sexual o identidad de género:</strong> cualquier información sobre la identidad u orientación del alumnado o de las familias.</li>
+<li><strong>Origen étnico o racial:</strong> datos sobre etnia, país de origen en contexto discriminatorio, pertenencia a minorías.</li>
+<li><strong>Convicciones religiosas o ideológicas:</strong> creencias, prácticas religiosas, filiación política de las familias.</li>
+<li><strong>Datos biométricos:</strong> huellas dactilares, reconocimiento facial.</li>
+<li><strong>Condiciones sociofamiliares sensibles:</strong> situaciones de custodia, órdenes de alejamiento, violencia intrafamiliar, situaciones de desamparo.</li>
+</ul>
+
+<div class="info-box success">
+<div class="info-box-title">📋 Resumen práctico en tres niveles</div>
+<p><strong>Sin datos personales</strong> → Cualquier IA (ChatGPT, Claude, Gemini, Copilot…). Usa la que prefieras.</p>
+<p><strong>Con datos personales básicos</strong> (nombre, nota, grupo) → <strong>Solo Copilot @edu.gva.es</strong>.</p>
+<p><strong>Datos de categoría especial</strong> (salud, etnia, religión, orientación sexual…) → <strong>Nunca en ninguna IA</strong>, ni corporativa ni comercial.</p>
+</div>
+
+<h3>¿Por qué se puede confiar en Copilot @edu.gva.es?</h3>
+<p>La confianza en el sistema corporativo se basa en tres pilares:</p>
+<ol>
+<li><strong>Convenio contractual con Microsoft:</strong> la Generalitat Valenciana tiene un acuerdo de procesamiento de datos (DPA) que obliga a Microsoft a tratar los datos de las cuentas @edu.gva.es de acuerdo con el RGPD europeo.</li>
+<li><strong>No-entrenamiento del modelo:</strong> Microsoft ha garantizado por contrato que los datos introducidos en Copilot con cuentas corporativas <strong>no se utilizan para entrenar ni mejorar los modelos de lenguaje</strong>. Las conversaciones se procesan y se descartan.</li>
+<li><strong>Residencia de datos en la UE:</strong> los servidores que procesan las peticiones están ubicados dentro de la Unión Europea, cumpliendo con los requisitos de transferencia internacional de datos del RGPD.</li>
+</ol>
+<hr />
+  </div>
+</section>
+
+<!-- Cuentas @alu.gva.es -->
+<section id="es-alumnado" class="major-section">
+  <div class="major-section-header theme-purple">
+    <div class="major-section-num">06</div>
+    <h2>🎓 Cuentas @alu.gva.es y uso de la IA por parte del alumnado</h2>
+  </div>
+  <div class="major-section-body">
+<p>El alumnado de la Comunitat Valenciana dispone de cuentas <code>@alu.gva.es</code> dentro del ecosistema Microsoft 365 educativo. Sin embargo, la situación respecto al acceso a la IA es diferente de la del profesorado.</p>
+
+<h3>Estado actual de Copilot en cuentas @alu.gva.es</h3>
+<div class="info-box">
+<div class="info-box-title">ℹ️ Situación a julio de 2026</div>
+<p>A julio de 2026, las cuentas <code>@alu.gva.es</code> <strong>no tienen habilitado Microsoft Copilot</strong> como asistente de IA conversacional. El alumnado no puede acceder a la funcionalidad de chat de Copilot con su cuenta escolar.</p>
+<p>No obstante, <strong>se está trabajando activamente para habilitar Copilot para el alumnado mayor de 13 años</strong>, con las garantías de protección de datos adecuadas y con el consentimiento correspondiente.</p>
+</div>
+
+<h3>¿Qué puede hacer el alumnado ahora?</h3>
+<p>Aunque Copilot no está habilitado como chat de IA, el alumnado puede encontrar funcionalidades de IA integradas en algunas aplicaciones de Microsoft 365 (como la búsqueda inteligente en Bing o las sugerencias de escritura en Word). Estas funcionalidades actúan más como un <strong>buscador mejorado</strong> que como un asistente generativo completo.</p>
+
+<div class="info-box warning">
+<div class="info-box-title">⚠️ Mirada crítica del docente</div>
+<p>Cuando el alumnado utiliza cualquier herramienta con componentes de IA (sea dentro de Microsoft 365 o fuera), es fundamental que el docente:</p>
+<ul style="margin:0.5rem 0 0 1.2rem;">
+<li><strong>Supervise el uso</strong> y guíe al alumnado en la interpretación de los resultados.</li>
+<li>Fomente la <strong>mirada crítica</strong>: la IA puede dar respuestas incorrectas, sesgadas o descontextualizadas.</li>
+<li>Enseñe a <strong>verificar la veracidad</strong> de los datos obtenidos contrastando con fuentes fiables.</li>
+<li>Establezca <strong>normas claras de uso</strong> en el aula: cuándo es adecuado usar IA, cuándo no, y qué constituye un uso académicamente honesto.</li>
+<li>Recuerde que <strong>la IA nunca sustituye el proceso de aprendizaje</strong>: copiar una respuesta de la IA no es aprender.</li>
+</ul>
+</div>
+
+<h3>Recomendaciones para el aula</h3>
+<p>Mientras se habilita Copilot para el alumnado, recomendamos a los docentes:</p>
+<ul>
+<li>Usar la IA como <strong>herramienta de demostración</strong> en el aula (el docente proyecta y el alumnado observa y analiza).</li>
+<li>Diseñar actividades donde el alumnado <strong>evalúe críticamente respuestas de la IA</strong> (comparando con fuentes primarias).</li>
+<li>Trabajar el <strong>alfabeto digital</strong>: que el alumnado entienda qué es un LLM, por qué puede fallar y qué sesgos puede tener.</li>
+<li>Preparar al alumnado para un futuro próximo en el que tendrán acceso directo a estas herramientas.</li>
+</ul>
+<hr />
+  </div>
+</section>
+
+
+
+</article>
+    </div>
+  </main>
+</div>
+
+<footer>
+  <p><strong>CEFIRE d'Intel·ligència Artificial i Pensament Computacional</strong><br>
+  Conselleria d'Educació, Universitats i Ocupació · Generalitat Valenciana</p>
+  <div style="margin-top:0.8rem;">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener"><img src="data:image/png;base64,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" alt="CC BY-NC-SA 4.0" style="height:42px;"></a>
+  </div>
+  <p id="cc-va" style="margin-top:0.5rem;">
+    Aquesta obra està subjecta a una llicència <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ca" target="_blank" rel="noopener">Creative Commons Reconeixement-NoComercial-CompartirIgual 4.0 Internacional (CC BY-NC-SA 4.0)</a>.<br>
+    Es permet visualitzar, compartir i adaptar el material sempre que es reconega l'autoria, no se'n faça ús comercial i es mantinga la mateixa llicència.
+  </p>
+  <p id="cc-es" style="margin-top:0.5rem; display:none;">
+    Esta obra está sujeta a una licencia <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es" target="_blank" rel="noopener">Creative Commons Reconocimiento-NoComercial-CompartirIgual 4.0 Internacional (CC BY-NC-SA 4.0)</a>.<br>
+    Se permite visualizar, compartir y adaptar el material siempre que se reconozca la autoría, no se haga uso comercial y se mantenga la misma licencia.
+  </p>
+</footer>
+
+<script>
+  const langButtons = document.querySelectorAll('.lang-btn');
+  const langContents = {
+    va: document.getElementById('content-va'),
+    es: document.getElementById('content-es')
+  };
+  const navGroups = {
+    va: document.getElementById('nav-va'),
+    es: document.getElementById('nav-es')
+  };
+  const heroTitles = {
+    va: document.getElementById('hero-title-va'),
+    es: document.getElementById('hero-title-es')
+  };
+  const heroEyebrows = {
+    va: document.getElementById('hero-eyebrow-va'),
+    es: document.getElementById('hero-eyebrow-es')
+  };
+  const courseHomeLink = document.querySelector('.course-home-link');
+  const ccVa = document.getElementById('cc-va');
+  const ccEs = document.getElementById('cc-es');
+
+  function setLang(lang) {
+    Object.entries(langContents).forEach(([key, node]) => {
+      node.classList.toggle('active', key === lang);
+    });
+    Object.entries(navGroups).forEach(([key, node]) => {
+      node.classList.toggle('active', key === lang);
+    });
+    Object.entries(heroTitles).forEach(([key, node]) => {
+      node.classList.toggle('active', key === lang);
+    });
+    Object.entries(heroEyebrows).forEach(([key, node]) => {
+      node.classList.toggle('active', key === lang);
+    });
+    langButtons.forEach((button) => {
+      button.classList.toggle('active', button.dataset.lang === lang);
+    });
+    if (courseHomeLink) {
+      courseHomeLink.textContent = courseHomeLink.dataset[lang === 'va' ? 'labelVa' : 'labelEs'];
+    }
+    if (ccVa && ccEs) {
+      ccVa.style.display = lang === 'va' ? 'block' : 'none';
+      ccEs.style.display = lang === 'es' ? 'block' : 'none';
+    }
+    const mt = document.getElementById('menuToggle');
+    if (mt && !document.querySelector('aside').classList.contains('open')) {
+      mt.textContent = lang === 'va' ? '☰ Índex' : '☰ Índice';
+    }
+    document.documentElement.lang = lang === 'va' ? 'ca' : 'es';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  langButtons.forEach((button) => {
+    button.addEventListener('click', () => setLang(button.dataset.lang));
+  });
+
+  document.querySelectorAll('.nav-link').forEach((link) => {
+    link.addEventListener('click', () => {
+      document.querySelectorAll('.nav-link').forEach((item) => item.classList.remove('active'));
+      link.classList.add('active');
+      // Close sidebar on mobile after clicking a link
+      const aside = document.querySelector('aside');
+      if (window.innerWidth <= 960 && aside) {
+        aside.classList.remove('open');
+        document.getElementById('menuToggle').textContent = '☰ Índex';
+      }
+    });
+  });
+
+  // Hamburger menu toggle
+  const menuToggle = document.getElementById('menuToggle');
+  if (menuToggle) {
+    menuToggle.addEventListener('click', () => {
+      const aside = document.querySelector('aside');
+      aside.classList.toggle('open');
+      menuToggle.textContent = aside.classList.contains('open') ? '✕ Tancar' : '☰ Índex';
+    });
+  }
+</script>
+</body>
+</html>
