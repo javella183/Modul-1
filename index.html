@@ -1208,6 +1208,119 @@ header .brand{gap:0!important}
 .cefire-footer-brand a:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(16,43,69,.10);}
 .cefire-footer-brand img{display:block;margin:0 auto;max-width:min(430px,88vw);height:auto;}
 #cc-va,#cc-es{margin:.45rem 0 0!important;color:#5f7283;font-size:.78rem;}
+
+
+/* ===== Mobile index: intuitive drawer interaction ===== */
+:root { --mobile-header-height: 116px; }
+[id] { scroll-margin-top: calc(var(--mobile-header-height) + 14px); }
+.menu-backdrop { display:none; }
+
+@media (max-width: 960px) {
+  header { z-index: 60; }
+  body.menu-open { overflow: hidden; touch-action: none; }
+
+  .menu-toggle {
+    position: relative;
+    z-index: 62;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: .45rem;
+    min-height: 44px;
+    border-color: rgba(255,255,255,.30);
+    background: rgba(255,255,255,.10);
+  }
+  .menu-toggle[aria-expanded="true"] {
+    background: #dcecf7;
+    color: #13324a;
+    border-color: #dcecf7;
+  }
+
+  .layout { display:block; }
+  .layout > aside {
+    display:block !important;
+    position: fixed !important;
+    z-index: 55;
+    top: var(--mobile-header-height) !important;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: auto !important;
+    max-height: calc(100dvh - var(--mobile-header-height));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    padding: .7rem 0 1rem !important;
+    margin: 0;
+    background: linear-gradient(180deg,#10283d 0%,#0b1f31 100%);
+    box-shadow: 0 22px 45px rgba(5,18,30,.38);
+    transform: translateY(-14px);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: transform .22s ease, opacity .18s ease, visibility .18s ease;
+  }
+  .layout > aside.open {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .menu-backdrop {
+    display:block;
+    position: fixed;
+    z-index: 50;
+    top: var(--mobile-header-height);
+    left:0;
+    right:0;
+    bottom:0;
+    background: rgba(7,22,35,.46);
+    backdrop-filter: blur(2px);
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+    transition: opacity .18s ease, visibility .18s ease;
+  }
+  .menu-backdrop.open {
+    opacity:1;
+    visibility:visible;
+    pointer-events:auto;
+  }
+
+  .nav-group.active { display:block; }
+  .nav-label {
+    position: sticky;
+    top: -.7rem;
+    z-index:2;
+    margin: 0 0 .35rem;
+    padding: .95rem 1.15rem .65rem;
+    background: #10283d;
+    color: #9ed8f4;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+    font-size: .75rem;
+  }
+  .nav-link {
+    min-height: 48px;
+    padding: .78rem 1rem .78rem 1.15rem;
+    margin: 0 .75rem .28rem;
+    border-radius: 11px;
+    border-left: 3px solid transparent;
+    font-size: .92rem;
+    line-height: 1.25;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .nav-link-resource { min-height: 52px; }
+  .nav-link:active { transform: scale(.992); }
+  .nav-link .nav-bullet { min-width: 1.15rem; }
+}
+
+@media (max-width: 640px) {
+  .menu-toggle { width:100%; font-size:.86rem; }
+  .layout > aside { padding-top:.45rem !important; }
+  .nav-label { top:-.45rem; }
+  .nav-link { margin-left:.55rem; margin-right:.55rem; }
+}
 </style>
 </head>
 <body>
@@ -1220,11 +1333,11 @@ header .brand{gap:0!important}
 <button aria-pressed="true" class="lang-btn active" data-lang="va" type="button">Valencià</button>
 <button aria-pressed="false" class="lang-btn" data-lang="es" type="button">Castellano</button>
 </div>
-<button class="menu-toggle" id="menuToggle" type="button">☰ Índex</button>
+<button aria-controls="courseIndex" aria-expanded="false" aria-haspopup="true" aria-label="Obrir índex" class="menu-toggle" id="menuToggle" type="button">☰ Índex</button>
 </div>
 </header>
 <div class="layout">
-<aside>
+<aside aria-hidden="true" id="courseIndex">
 <nav class="nav-group active" id="nav-va">
 <div class="nav-label">Valencià</div>
 <a class="nav-link nav-link-resource" href="#va-modul-1"><span class="nav-bullet">◆</span><span>Introducció a l'IA educativa</span></a>
@@ -1245,7 +1358,7 @@ header .brand{gap:0!important}
 <a class="nav-link nav-link-section" href="#es-rol-docente"><span class="nav-bullet">•</span><span>El rol del docente con IA</span></a>
 <a class="nav-link nav-link-section" href="#es-ia-corporativa"><span class="nav-bullet">🔒</span><span>IA corporativa y protección de datos</span></a>
 </nav>
-</aside>
+</aside><div aria-hidden="true" class="menu-backdrop" id="menuBackdrop"></div>
 <main>
 <section class="hero"><div class="hero-inner"><div class="hero-copy">
 <div class="hero-eyebrow active" id="hero-eyebrow-va">● Fonaments · IA generativa · IA corporativa · protecció de dades</div>
@@ -1875,11 +1988,9 @@ header .brand{gap:0!important}
       ccVa.style.display = lang === 'va' ? 'block' : 'none';
       ccEs.style.display = lang === 'es' ? 'block' : 'none';
     }
-    const mt = document.getElementById('menuToggle');
-    if (mt && !document.querySelector('aside').classList.contains('open')) {
-      mt.textContent = lang === 'va' ? '☰ Índex' : '☰ Índice';
-    }
     document.documentElement.lang = lang === 'va' ? 'ca' : 'es';
+    closeMobileIndex();
+    updateMenuButton();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -1887,29 +1998,108 @@ header .brand{gap:0!important}
     button.addEventListener('click', () => setLang(button.dataset.lang));
   });
 
+  const mobileAside = document.getElementById('courseIndex') || document.querySelector('aside');
+  const menuToggle = document.getElementById('menuToggle');
+  const menuBackdrop = document.getElementById('menuBackdrop');
+
+  function currentLanguage() {
+    return document.documentElement.lang === 'es' ? 'es' : 'va';
+  }
+
+  function updateMobileHeaderHeight() {
+    const header = document.querySelector('header');
+    if (!header) return;
+    document.documentElement.style.setProperty('--mobile-header-height', `${Math.ceil(header.getBoundingClientRect().height)}px`);
+  }
+
+  function updateMenuButton() {
+    if (!menuToggle) return;
+    const isOpen = Boolean(mobileAside && mobileAside.classList.contains('open'));
+    const isEs = currentLanguage() === 'es';
+    menuToggle.textContent = isOpen ? (isEs ? '✕ Cerrar índice' : '✕ Tancar índex') : (isEs ? '☰ Índice' : '☰ Índex');
+    menuToggle.setAttribute('aria-expanded', String(isOpen));
+    menuToggle.setAttribute('aria-label', isOpen ? (isEs ? 'Cerrar índice' : 'Tancar índex') : (isEs ? 'Abrir índice' : 'Obrir índex'));
+  }
+
+  function openMobileIndex() {
+    if (!mobileAside || window.innerWidth > 960) return;
+    updateMobileHeaderHeight();
+    mobileAside.classList.add('open');
+    mobileAside.setAttribute('aria-hidden', 'false');
+    if (menuBackdrop) menuBackdrop.classList.add('open');
+    document.body.classList.add('menu-open');
+    updateMenuButton();
+  }
+
+  function closeMobileIndex() {
+    if (!mobileAside) return;
+    mobileAside.classList.remove('open');
+    mobileAside.setAttribute('aria-hidden', window.innerWidth <= 960 ? 'true' : 'false');
+    if (menuBackdrop) menuBackdrop.classList.remove('open');
+    document.body.classList.remove('menu-open');
+    updateMenuButton();
+  }
+
+  function toggleMobileIndex() {
+    if (!mobileAside) return;
+    mobileAside.classList.contains('open') ? closeMobileIndex() : openMobileIndex();
+  }
+
   document.querySelectorAll('.nav-link').forEach((link) => {
-    link.addEventListener('click', () => {
+    link.addEventListener('click', (event) => {
       document.querySelectorAll('.nav-link').forEach((item) => item.classList.remove('active'));
       link.classList.add('active');
-      // Close sidebar on mobile after clicking a link
-      const aside = document.querySelector('aside');
-      if (window.innerWidth <= 960 && aside) {
-        aside.classList.remove('open');
-        document.getElementById('menuToggle').textContent = document.documentElement.lang === 'es' ? '☰ Índice' : '☰ Índex';
+
+      if (window.innerWidth <= 960) {
+        const targetId = link.getAttribute('href');
+        const target = targetId && targetId.startsWith('#') ? document.querySelector(targetId) : null;
+        if (target) {
+          event.preventDefault();
+          closeMobileIndex();
+          requestAnimationFrame(() => {
+            setTimeout(() => target.scrollIntoView({ behavior: 'smooth', block: 'start' }), 40);
+          });
+        } else {
+          closeMobileIndex();
+        }
       }
     });
   });
 
-  // Hamburger menu toggle
-  const menuToggle = document.getElementById('menuToggle');
   if (menuToggle) {
-    menuToggle.addEventListener('click', () => {
-      const aside = document.querySelector('aside');
-      aside.classList.toggle('open');
-      const isEs = document.documentElement.lang === 'es';
-      menuToggle.textContent = aside.classList.contains('open') ? (isEs ? '✕ Cerrar' : '✕ Tancar') : (isEs ? '☰ Índice' : '☰ Índex');
+    menuToggle.addEventListener('click', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      toggleMobileIndex();
     });
   }
+
+  if (menuBackdrop) {
+    menuBackdrop.addEventListener('click', closeMobileIndex);
+  }
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && mobileAside && mobileAside.classList.contains('open')) {
+      closeMobileIndex();
+      if (menuToggle) menuToggle.focus();
+    }
+  });
+
+  window.addEventListener('resize', () => {
+    updateMobileHeaderHeight();
+    if (window.innerWidth > 960) {
+      closeMobileIndex();
+      if (mobileAside) mobileAside.setAttribute('aria-hidden', 'false');
+    }
+  });
+
+  window.addEventListener('orientationchange', () => {
+    setTimeout(updateMobileHeaderHeight, 120);
+  });
+
+  updateMobileHeaderHeight();
+  if (mobileAside) mobileAside.setAttribute('aria-hidden', window.innerWidth <= 960 ? 'true' : 'false');
+  updateMenuButton();
 </script>
 </body>
 </html>
